@@ -1,0 +1,132 @@
+/* craigcloud.css — the single source of truth for craigcloud surfaces.
+ *
+ * Every value here is MEASURED, not chosen. Contrast ratios are against the
+ * panel ground #101319. Do not add a colour without measuring it, and do not
+ * introduce a second palette in a project -- import this one.
+ *
+ * Used by: ai-lawnmower status page + console, upload-factory, mariners-lineup.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root{
+  /* Four stacked surfaces. NOT #000: pure black has nothing below it, so you
+     cannot layer panels, and it halates for astigmatic eyes at 6am. */
+  --cc-void:#0a0b0f;  --cc-panel:#101319; --cc-raised:#161b24; --cc-input:#1d2430;
+  --cc-line:#262d3b;  --cc-line-hi:#313b4d;
+
+  /* Text, measured: 15.7 / 8.4 / 5.5 / 4.7. The last is the floor and is for
+     ornaments only -- never body copy. */
+  --cc-fg:#e6edf3; --cc-mut:#9fb0c3; --cc-lo:#7d8da1; --cc-dim:#72819a;
+
+  /* Accents. Cyan is the structural accent and is safe even as data.
+     Magenta at 5.31 is CHROME ONLY -- it must never carry a data column. */
+  --cc-cyan:#22d3ee;     /* 10.29 */
+  --cc-magenta:#ff2e88;  /*  5.31 — chrome only */
+
+  /* Status triad, CVD-checked. The naive neon set (#00ff41/#ffff00/#ff0033)
+     collapses to deltaE 9.1 under protanopia — ok and warn become the same
+     colour. This triad holds deltaE 23.9 worst case across protan/deutan/tritan. */
+  --cc-ok:#3ddc97;    /* 10.52 */
+  --cc-warn:#ffb02e;  /* 10.19 */
+  --cc-bad:#ff5c5c;   /*  6.14 */
+
+  --cc-glow:0 0 14px rgba(34,211,238,.32);
+  --cc-mono:'JetBrains Mono',"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --cc-disp:'Chakra Petch',Rajdhani,system-ui,-apple-system,sans-serif;
+}
+
+/* ── base ───────────────────────────────────────────────────────────────── */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--cc-void)}
+body{margin:0 auto;padding:1rem 1rem 3rem;background:var(--cc-void);color:var(--cc-fg);
+  font:14px/1.5 var(--cc-mono);max-width:920px;position:relative}
+
+/* Grid belongs on the page ground ONLY, never behind text, and masked so it
+   fades rather than competing with data. */
+.cc-grid-bg::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:linear-gradient(#1a2030 1px,transparent 1px) 0 0/64px 64px,
+             linear-gradient(90deg,#1a2030 1px,transparent 1px) 0 0/64px 64px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0%,#000 38%,transparent 84%);
+  mask-image:radial-gradient(ellipse at 50% 0%,#000 38%,transparent 84%)}
+.cc-grid-bg>*{position:relative;z-index:1}
+
+/* ── type ───────────────────────────────────────────────────────────────── */
+.cc-h1{font:700 1.45rem/1.1 var(--cc-disp);letter-spacing:.06em;text-transform:uppercase;
+  margin:0;color:#fff;text-shadow:var(--cc-glow)}
+.cc-h1 .accent{color:var(--cc-cyan)}
+.cc-h2{font:600 .69rem/1 var(--cc-disp);text-transform:uppercase;letter-spacing:.11em;
+  color:var(--cc-mut);margin:1.9rem 0 .65rem;display:flex;align-items:center;gap:.6rem}
+.cc-h2::before{content:"";width:5px;height:5px;background:var(--cc-cyan);flex:none;
+  transform:rotate(45deg)}
+.cc-h2::after{content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,var(--cc-line-hi),transparent)}
+/* Every heading gets one of these. A reader who was not in the design
+   conversation should still know what a number means. */
+.cc-explain{color:var(--cc-lo);font-size:.75rem;line-height:1.55;margin:-.3rem 0 .7rem;
+  max-width:62ch;font-family:var(--cc-mono)}
+.cc-explain b{color:var(--cc-mut);font-weight:600}
+
+/* ── surfaces ───────────────────────────────────────────────────────────── */
+.cc-card{background:var(--cc-panel);border:1px solid var(--cc-line);border-radius:2px;
+  padding:.85rem .9rem;position:relative;min-height:44px}
+@supports (corner-shape:bevel){
+  .cc-card,.cc-row,.cc-wrap{corner-shape:bevel;border-start-start-radius:12px;
+    border-end-end-radius:12px}
+}
+/* Corner brackets mark the panel that WANTS attention. On every panel they
+   carry no information at all. */
+.cc-card.flag::before,.cc-card.flag::after{content:"";position:absolute;
+  width:10px;height:10px;border-color:var(--cc-cyan)}
+.cc-card.flag::before{top:-1px;left:-1px;border-top:2px solid;border-left:2px solid}
+.cc-card.flag::after{bottom:-1px;right:-1px;border-bottom:2px solid;border-right:2px solid}
+.cc-row{background:var(--cc-panel);border:1px solid var(--cc-line);
+  border-left:2px solid var(--cc-line-hi);border-radius:2px;padding:.62rem .8rem;
+  margin-bottom:.4rem;font-size:.83rem;min-height:44px;
+  transition:border-color .15s,background .15s}
+.cc-row:hover{background:var(--cc-raised);border-left-color:var(--cc-cyan)}
+.cc-row.alert{border-left-color:var(--cc-warn)}
+.cc-row.live{border-left-color:var(--cc-cyan)}
+
+.cc-big{font:600 1.7rem/1 var(--cc-mono);font-variant-numeric:tabular-nums;
+  letter-spacing:-.01em;color:var(--cc-fg)}
+.cc-lbl{color:var(--cc-mut);font:600 .64rem/1.45 var(--cc-disp);margin-top:.42rem;
+  text-transform:uppercase;letter-spacing:.09em}
+
+/* ── state: hue is NEVER the only signal ────────────────────────────────── */
+.cc-ok{color:var(--cc-ok)} .cc-warn{color:var(--cc-warn)} .cc-bad{color:var(--cc-bad)}
+.cc-gl{font-size:.72rem;margin-right:.32rem}   /* ● ▲ ✕ ◆ ○ ride along with hue */
+.cc-tag{font:600 .6rem/1.7 var(--cc-disp);text-transform:uppercase;letter-spacing:.1em;
+  padding:.08rem .4rem;border:1px solid var(--cc-line-hi);color:var(--cc-mut);
+  margin-right:.4rem;white-space:nowrap;border-radius:2px}
+.cc-tag.on{color:var(--cc-cyan);border-color:var(--cc-cyan)}
+
+/* ── tables ─────────────────────────────────────────────────────────────── */
+.cc-wrap{overflow-x:auto;border:1px solid var(--cc-line);background:var(--cc-panel);
+  border-radius:2px}
+.cc-wrap table{width:100%;border-collapse:collapse;font-size:.79rem}
+.cc-wrap td{padding:.55rem .7rem;border-bottom:1px solid var(--cc-line)}
+.cc-wrap tr:last-child td{border-bottom:none}
+.cc-wrap tr:hover td{background:var(--cc-raised)}
+.cc-wrap td.n{text-align:right;font-variant-numeric:tabular-nums;color:var(--cc-mut);
+  white-space:nowrap}
+.cc-wrap tr.head td{color:var(--cc-mut);font:600 .62rem/1.6 var(--cc-disp);
+  text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--cc-line-hi)}
+
+/* ── non-negotiables ────────────────────────────────────────────────────── */
+a{color:var(--cc-cyan);text-decoration:none;border-bottom:1px solid var(--cc-line-hi)}
+a:hover{border-bottom-color:var(--cc-cyan)}
+:focus-visible{outline:2px solid var(--cc-cyan);outline-offset:2px}
+@media (prefers-reduced-motion:no-preference){
+  @keyframes cc-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .cc-pulse{animation:cc-pulse 2.2s ease-in-out infinite}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;
+    transition-duration:.01ms!important;animation-iteration-count:1!important}
+}
+@media (max-width:480px){
+  body{padding:.75rem .75rem 2.5rem}
+  .cc-h1{font-size:1.2rem}
+  .cc-big{font-size:1.45rem}
+}
