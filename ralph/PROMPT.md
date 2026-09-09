@@ -1,36 +1,52 @@
-# Ralph prompt — harness scaffold, no milestone planned yet
+# Ralph prompt — lm-92: docs-site scaffolding ships files, not prose
 
-This `ralph/` directory was installed by `loop/ralph-onboard.sh` from
-`craig-ai-tooling/ai-lawnmower`. Its only job is to make `./ralph/loop.sh`
-runnable, so a Ralph Job clone-and-run no longer dies for want of the file.
+You are one iteration of a loop. You have a completely fresh context: you
+remember nothing about earlier iterations except what is written on disk. Do
+exactly one task, verify it, record it, commit, and stop.
 
-This is NOT a real milestone. Do not dispatch this repo to the cluster until a
-planning pass has replaced this file, `ralph/IMPLEMENTATION_PLAN.md` and
-`ralph/PROGRESS.md` with an actual plan — `loop/ralph-prepare.sh <task-id> --go`
-in ai-lawnmower, or the same shape written by hand.
+The milestone: four document-producing skills in this repo hand the agent code
+to retype instead of a file to run. Turn that prose into shipped files, make the
+two copies of the MkDocs brand stylesheet identical, and add a check that fails
+when they drift apart again.
 
 ## Do this, in order
 
 1. Read `ralph/IMPLEMENTATION_PLAN.md`. If it has no open `- [ ]` task, stop —
-   there is nothing to do yet. Do not invent one.
+   there is nothing to do. Do not invent one.
 2. Read `ralph/PROGRESS.md` to see what earlier iterations already did, and do
    not redo it.
-3. Read this repo's own `AGENTS.md` or `CLAUDE.md` at its root, if either
-   exists. Its working rules apply to you.
-4. Take the topmost unchecked `- [ ]` task in `ralph/IMPLEMENTATION_PLAN.md`.
+3. Read `ralph/VALIDATION_CONTRACT.md`. It is what "done" means for the whole
+   milestone. Your task must move toward it and must never break an assertion
+   that already holds.
+4. Read this repo's `CLAUDE.md` at its root. Its working rules apply to you.
+5. Take the topmost unchecked `- [ ]` task in `ralph/IMPLEMENTATION_PLAN.md`.
    Exactly one.
-5. Do that task, and only that task. Stay inside the `Files touched` allowlist
+6. Do that task, and only that task. Stay inside the `Files touched` allowlist
    in `ralph/IMPLEMENTATION_PLAN.md` — a diff outside it is rejected before it
    can ship.
-6. Run the task's own verification command. It must pass.
-7. Tick the task to `- [x]` and append to `ralph/PROGRESS.md`: the task, the
+7. Run the task's own verification command, from the repository root. It must
+   pass. Run `make validate` as well; it exits 0 today and must still exit 0.
+8. Tick the task to `- [x]` and append to `ralph/PROGRESS.md`: the task, the
    command you ran, and its real output — not a summary of what it should have
    said.
-8. Commit only the paths you touched. Never `git add -A` — other work may share
+9. Commit only the paths you touched. Never `git add -A` — other work may share
    this tree.
-9. If every task is `- [x]`, append a final line to `ralph/PROGRESS.md`
-   containing only `RALPH_COMPLETE` — a line of its own, nothing else — and
-   stop.
+10. If every task is `- [x]`, append a final line to `ralph/PROGRESS.md`
+    containing only the exit sentinel `RALPH_COMPLETE` — a line of its own,
+    nothing else — and stop.
+
+## Things that will waste an iteration if you forget them
+
+- `mkdocs-material` and `puppeteer` are NOT installed here. Never verify by
+  running `mkdocs build` or by rendering a PDF. `node --check` and the
+  no-argument usage path are the whole check for the render scripts.
+- `scripts/secret_scan.py` scans `.mjs` as well as `.md`. Nothing you write may
+  contain a lab hostname, a `172.18.x` address, an `op://` reference or a
+  personal handle, or `make validate` will fail.
+- `scripts/quick_validate.py` caps every `SKILL.md` at 500 lines. Moving blocks
+  out of a `SKILL.md` shrinks it; adding to one may not.
+- `dist/` is gitignored. Scaffold and package into it freely, and never commit it.
+- `.github/workflows/` is out of scope. Do not touch it.
 
 ## If you are blocked
 
