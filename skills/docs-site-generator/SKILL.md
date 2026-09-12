@@ -1,6 +1,6 @@
 ---
 name: docs-site-generator
-description: Generate branded documentation sites with MkDocs Material or Docusaurus. Produces structured Markdown files, navigation config, and brand theming. Use when asked for a docs site, docs portal, knowledge base, or runbook site for a project or customer. For prospect-facing POC guide sites use spectrocloud-poc-docs (it composes this skill); for architecture diagrams inside a site use architecture-diagrams.
+description: Generate a branded multi-page documentation site with MkDocs Material or Docusaurus -- structured Markdown files, navigation config, and brand theming. Use when asked for a docs site, docs portal, knowledge base, or runbook site for a project or customer. Owns navigable multi-page sites only -- for a long-form single writeup use doc-writer, for a 1-2 page executive PDF use exec-doc-generator, and for a slide deck (rendered PDF or a Google Slides link) use slide-deck-generator. For prospect-facing POC guide sites use spectrocloud-poc-docs (it composes this skill); for architecture diagrams inside a site use architecture-diagrams. See the Deliverable Routing table in doc-writer.
 ---
 
 # Documentation Site Generator
@@ -16,6 +16,8 @@ Generate complete documentation sites as a directory of Markdown files with navi
 - Internal knowledge bases and runbooks
 - API reference sites with guides
 - Operations and troubleshooting documentation
+
+Not this deliverable? See the Deliverable Routing table in the `doc-writer` skill: it covers long-form writeups, 1-2 page executive PDFs, and slide decks (PDF or Google Slides).
 
 > **Publishing a prospect-facing POC guide site?** Use the `spectrocloud-poc-docs` skill for the full build→test→publish lifecycle (it composes this skill for theming) — including the Cloudflare Access gating step that must cover the `*.project.pages.dev` preview-URL wildcard, not just the apex hostname.
 
