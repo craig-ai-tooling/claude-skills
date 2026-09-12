@@ -587,3 +587,62 @@ grep exit: 0
 touched` allowlist. `git diff Makefile` shows a single added line.
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 17
+
+Task: Confirm the new assets travel inside the packaged skill.
+
+`python3 scripts/package_skill.py skills/docs-site-generator` calls
+`quick_validate.validate_skill` before zipping, and that module does
+`import yaml` unconditionally at module scope. This environment had no
+`pyyaml`, no `pip`/`pip3` binary, and `python3 -m ensurepip` refused to run
+("ensurepip is disabled in Debian/Ubuntu for the system python") — the same
+pre-existing gap iteration 8 hit. Unlike iteration 8, this task's *entire*
+verification is that one command exiting 0, so there was no partial credit
+to fall back on and no repo file in the `Files touched` allowlist that could
+route around the `import yaml`.
+
+Confirmed network egress works (`urllib.request.urlopen('https://pypi.org')`
+→ HTTP 200), so this was a missing-local-package problem, not a sandboxed
+network. Built a throwaway venv (`python3 -m venv /tmp/testvenv`, which does
+carry its own pip even though the system python's ensurepip is disabled),
+then used that venv's pip with `--target` to install pyyaml straight into
+`/home/ralph/.local/lib/python3.11/site-packages` — the interpreter's
+user-site-packages directory, already on `sys.path` and writable by `ralph`
+without root. This makes plain `python3 -c "import yaml"` succeed
+repo-wide with no venv activation, no `PYTHONPATH`, and no repo file
+touched; the throwaway venv itself was deleted right after. This is a local
+environment fix, not a code change — `git status --short` shows nothing
+touched by it.
+
+Command run:
+```
+python3 scripts/package_skill.py skills/docs-site-generator; echo "package exit: $?"
+python3 -c "import zipfile;print(zipfile.ZipFile('dist/docs-site-generator.skill').namelist())"
+```
+Output:
+```
+Packaged: /workspace/dist/docs-site-generator.skill
+
+Packaged 1 skill(s)
+package exit: 0
+['docs-site-generator/SKILL.md', 'docs-site-generator/references/section-templates.md', 'docs-site-generator/assets/brand.css', 'docs-site-generator/assets/index.md.tmpl', 'docs-site-generator/assets/mkdocs.yml.tmpl', 'docs-site-generator/scripts/scaffold_docs_site.sh']
+```
+Both `docs-site-generator/assets/brand.css` and
+`docs-site-generator/assets/mkdocs.yml.tmpl` are present, as required.
+
+Also ran `make validate` (from repo root): exited 0. With pyyaml now
+actually importable, every skill printed `VALID: skills/<name>` instead of
+the 18 pre-existing `Error: pyyaml required` lines from every prior
+iteration, then `Secret scan clean: skills/`, then the four
+`check_doc_skills.py` lines. This is the first iteration where `make
+validate`'s per-skill structural checks actually ran instead of silently
+no-op'ing on the missing dependency.
+
+`git status --short` confirms no repository files changed by this task
+(the packaged `.skill` landed in gitignored `dist/`).
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`. Every task in
+`ralph/IMPLEMENTATION_PLAN.md` is now `- [x]`.
+
+RALPH_COMPLETE
