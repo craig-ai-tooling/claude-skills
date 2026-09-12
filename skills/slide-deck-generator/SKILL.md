@@ -5,6 +5,8 @@ description: Generate branded Spectro Cloud presentation slide decks as HTML ren
 
 # Slide Deck Generator
 
+PDF route: assets/generate-pdf.mjs
+
 Build branded presentation slide decks as HTML files rendered to PDF via Puppeteer. Based on the official 2026 Spectro Cloud Google Slides templates. Used for customer presentations, internal reviews, solution overviews, and technical briefings.
 
 ## When to Use

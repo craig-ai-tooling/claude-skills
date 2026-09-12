@@ -5,6 +5,8 @@ description: Generate long-form branded Spectro Cloud documents -- customer asse
 
 # Spectro Cloud Document Writer
 
+PDF route: none
+
 Generate polished, long-form documents for Spectro Cloud customer engagements. Output is Markdown with YAML frontmatter suitable for Google Docs, static sites, or PDF conversion.
 
 **Brand foundation:** READ the `spectrocloud-brand` skill for colors, logos, typography, messaging, and tone before generating any document. This skill defines structure and templates; `spectrocloud-brand` is the source of truth for visual identity and messaging.

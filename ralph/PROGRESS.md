@@ -422,3 +422,42 @@ make validate exit: 0
 allowlist.
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 13
+
+Task: Add exactly one line starting `PDF route: ` to each of the four
+document skills' `SKILL.md` — `doc-writer` and `docs-site-generator` declare
+no PDF route, the other two name `assets/generate-pdf.mjs`.
+
+Inserted a single `PDF route: ` line right after each skill's H1 heading:
+`PDF route: none` in `skills/doc-writer/SKILL.md` and
+`skills/docs-site-generator/SKILL.md` (neither skill produces a PDF);
+`PDF route: assets/generate-pdf.mjs` in `skills/exec-doc-generator/SKILL.md`
+and `skills/slide-deck-generator/SKILL.md` (matching the shipped render
+scripts from iterations 9 and 11).
+
+Command run:
+```
+grep -q '^PDF route: ' skills/doc-writer/SKILL.md; echo "doc-writer: $?"
+grep -q '^PDF route: ' skills/docs-site-generator/SKILL.md; echo "docs-site-generator: $?"
+grep -q '^PDF route: ' skills/exec-doc-generator/SKILL.md; echo "exec-doc-generator: $?"
+grep -q '^PDF route: ' skills/slide-deck-generator/SKILL.md; echo "slide-deck-generator: $?"
+```
+Output:
+```
+doc-writer: 0
+docs-site-generator: 0
+exec-doc-generator: 0
+slide-deck-generator: 0
+```
+
+Also ran `make validate` (from repo root): exited 0. Output was 18
+pre-existing `Error: pyyaml required. Install with: pip install pyyaml`
+lines followed by `Secret scan clean: skills/` (pyyaml not installed in this
+environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+`git status --short` confirms only the four target `SKILL.md` files changed
+— inside the `Files touched` allowlist.
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.

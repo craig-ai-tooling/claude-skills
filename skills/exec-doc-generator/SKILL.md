@@ -5,6 +5,8 @@ description: Generate polished 2-page executive PDF documents (HTML+Puppeteer). 
 
 # Executive Document Generator
 
+PDF route: assets/generate-pdf.mjs
+
 Build polished, executive-grade 2-page PDF documents as HTML files rendered via Puppeteer. Used for customer-facing POC overviews, solution summaries, architecture briefs, and similar deliverables.
 
 ## When to Use

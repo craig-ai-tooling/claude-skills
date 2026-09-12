@@ -5,6 +5,8 @@ description: Generate branded documentation sites with MkDocs Material or Docusa
 
 # Documentation Site Generator
 
+PDF route: none
+
 Generate complete documentation sites as a directory of Markdown files with navigation configuration and brand theming. Outputs are ready to build with MkDocs Material or Docusaurus.
 
 ## When to Use

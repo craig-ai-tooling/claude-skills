@@ -82,7 +82,7 @@ ralph/PROGRESS.md
 
 - [x] Rewrite the render step in `skills/exec-doc-generator/references/puppeteer-render.md` and in both skills' `SKILL.md` to run the shipped script instead of retyping the code. Verify: `grep -q 'assets/generate-pdf.mjs' skills/exec-doc-generator/SKILL.md` exits 0, `grep -q 'assets/generate-pdf.mjs' skills/slide-deck-generator/SKILL.md` exits 0, and `make validate` exits 0.
 
-- [ ] Add exactly one line starting `PDF route: ` to each of the four document skills' `SKILL.md` — `doc-writer` and `docs-site-generator` declare no PDF route, the other two name `assets/generate-pdf.mjs`. Verify: `grep -q '^PDF route: ' skills/doc-writer/SKILL.md` exits 0, and the same holds for docs-site-generator, exec-doc-generator and slide-deck-generator.
+- [x] Add exactly one line starting `PDF route: ` to each of the four document skills' `SKILL.md` — `doc-writer` and `docs-site-generator` declare no PDF route, the other two name `assets/generate-pdf.mjs`. Verify: `grep -q '^PDF route: ' skills/doc-writer/SKILL.md` exits 0, and the same holds for docs-site-generator, exec-doc-generator and slide-deck-generator.
 
 - [ ] Create `scripts/check_doc_skills.py`: print one `<skill>: <route>` line for each of the four document skills read from their `PDF route: ` line, and exit 1 naming the offending file when a skill has zero or several such lines, or when the two `brand.css` copies are not byte-identical. Verify: `python3 scripts/check_doc_skills.py` exits 0 and prints 4 lines.
 
