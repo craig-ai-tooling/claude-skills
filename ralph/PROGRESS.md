@@ -266,3 +266,39 @@ quick_validate's 500-line cap once pyyaml is available to check it.
 changed (172 lines removed, 3 added) — inside the `Files touched` allowlist.
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 9
+
+Task: Create `skills/exec-doc-generator/assets/generate-pdf.mjs` from the
+Letter-format variant in `skills/exec-doc-generator/references/puppeteer-render.md`,
+taking `<input.html> <output.pdf>`, loading puppeteer by dynamic import only
+AFTER the argument check so a missing dependency cannot mask usage.
+
+Wrote `skills/exec-doc-generator/assets/generate-pdf.mjs`: reads
+`process.argv[2]`/`[3]` as `<input.html>`/`<output.pdf>`, checks both are
+present and exits 1 (printing a `usage:` line to stderr) before ever touching
+`import('puppeteer')`, then does `const { default: puppeteer } = await
+import('puppeteer')` only after that check, and renders with the Letter-format
+options (`format: 'letter'`, the same margins) from the reference doc's
+"Letter-format document (exec docs)" variant, resolving the input/output paths
+from the CLI args instead of the reference's hardcoded `OUTPUT_NAME` paths.
+
+Command run:
+```
+node --check skills/exec-doc-generator/assets/generate-pdf.mjs; echo "check exit: $?"
+```
+Output:
+```
+check exit: 0
+```
+
+Also ran `make validate` (from repo root): exited 0. Output was 18
+pre-existing `Error: pyyaml required. Install with: pip install pyyaml`
+lines followed by `Secret scan clean: skills/` (pyyaml not installed in this
+environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+`git status --short` confirms only `skills/exec-doc-generator/assets/generate-pdf.mjs`
+is new — inside the `Files touched` allowlist.
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.

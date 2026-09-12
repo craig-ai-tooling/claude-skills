@@ -74,7 +74,7 @@ ralph/PROGRESS.md
 
 - [x] Cut the `mkdocs.yml`, `brand.css` and landing-page fenced blocks out of `skills/docs-site-generator/SKILL.md` and replace each with a short pointer to the scaffolder and to `assets/`. Verify: `grep -q 'scripts/scaffold_docs_site.sh' skills/docs-site-generator/SKILL.md` exits 0 and `python3 scripts/quick_validate.py skills/docs-site-generator` exits 0.
 
-- [ ] Create `skills/exec-doc-generator/assets/generate-pdf.mjs` from the Letter-format variant in `skills/exec-doc-generator/references/puppeteer-render.md`, taking `<input.html> <output.pdf>`, loading puppeteer by dynamic import only AFTER the argument check so a missing dependency cannot mask usage. Verify: `node --check skills/exec-doc-generator/assets/generate-pdf.mjs` exits 0.
+- [x] Create `skills/exec-doc-generator/assets/generate-pdf.mjs` from the Letter-format variant in `skills/exec-doc-generator/references/puppeteer-render.md`, taking `<input.html> <output.pdf>`, loading puppeteer by dynamic import only AFTER the argument check so a missing dependency cannot mask usage. Verify: `node --check skills/exec-doc-generator/assets/generate-pdf.mjs` exits 0.
 
 - [ ] Give `skills/exec-doc-generator/assets/generate-pdf.mjs` a no-argument usage path: print a first stderr line beginning `usage:` and exit 1. Verify: `node skills/exec-doc-generator/assets/generate-pdf.mjs` exits 1, its stderr starts with `usage:`, and `node skills/exec-doc-generator/assets/generate-pdf.mjs 2>&1 | grep -q ERR_MODULE_NOT_FOUND` exits 1.
 
