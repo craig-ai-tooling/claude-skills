@@ -76,7 +76,7 @@ ralph/PROGRESS.md
 
 - [x] Create `skills/exec-doc-generator/assets/generate-pdf.mjs` from the Letter-format variant in `skills/exec-doc-generator/references/puppeteer-render.md`, taking `<input.html> <output.pdf>`, loading puppeteer by dynamic import only AFTER the argument check so a missing dependency cannot mask usage. Verify: `node --check skills/exec-doc-generator/assets/generate-pdf.mjs` exits 0.
 
-- [ ] Give `skills/exec-doc-generator/assets/generate-pdf.mjs` a no-argument usage path: print a first stderr line beginning `usage:` and exit 1. Verify: `node skills/exec-doc-generator/assets/generate-pdf.mjs` exits 1, its stderr starts with `usage:`, and `node skills/exec-doc-generator/assets/generate-pdf.mjs 2>&1 | grep -q ERR_MODULE_NOT_FOUND` exits 1.
+- [x] Give `skills/exec-doc-generator/assets/generate-pdf.mjs` a no-argument usage path: print a first stderr line beginning `usage:` and exit 1. Verify: `node skills/exec-doc-generator/assets/generate-pdf.mjs` exits 1, its stderr starts with `usage:`, and `node skills/exec-doc-generator/assets/generate-pdf.mjs 2>&1 | grep -q ERR_MODULE_NOT_FOUND` exits 1.
 
 - [ ] Create `skills/slide-deck-generator/assets/generate-pdf.mjs` from the 16:9 variant in that same reference, with the same dynamic-import and no-argument usage behaviour. Verify: `node --check skills/slide-deck-generator/assets/generate-pdf.mjs` exits 0, `node skills/slide-deck-generator/assets/generate-pdf.mjs` exits 1 with stderr starting `usage:` and no `ERR_MODULE_NOT_FOUND`.
 

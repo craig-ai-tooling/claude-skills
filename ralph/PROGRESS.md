@@ -302,3 +302,38 @@ environment; pre-existing per ground truth in
 is new — inside the `Files touched` allowlist.
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 10
+
+Task: Give `skills/exec-doc-generator/assets/generate-pdf.mjs` a no-argument
+usage path: print a first stderr line beginning `usage:` and exit 1.
+
+Read the file created in iteration 9 and found the usage path already
+present: the argument check (`if (!inputHtml || !outputPdf)`) prints
+`usage: node generate-pdf.mjs <input.html> <output.pdf>` to stderr and calls
+`process.exit(1)` *before* the `await import('puppeteer')` line, so this
+assertion already held with no source change needed.
+
+Command run:
+```
+node skills/exec-doc-generator/assets/generate-pdf.mjs; echo "exit: $?"
+node skills/exec-doc-generator/assets/generate-pdf.mjs 2>&1 1>/dev/null | head -1
+node skills/exec-doc-generator/assets/generate-pdf.mjs 2>&1 | grep -q ERR_MODULE_NOT_FOUND; echo "grep exit (expect 1): $?"
+```
+Output:
+```
+usage: node generate-pdf.mjs <input.html> <output.pdf>
+exit: 1
+usage: node generate-pdf.mjs <input.html> <output.pdf>
+grep exit (expect 1): 1
+```
+
+Also ran `make validate` (from repo root): exited 0. Output was 18
+pre-existing `Error: pyyaml required. Install with: pip install pyyaml`
+lines followed by `Secret scan clean: skills/` (pyyaml not installed in this
+environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+`git status --short` confirmed no source files needed changes for this task.
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
