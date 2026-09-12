@@ -107,6 +107,7 @@ else
 		fi \
 	done
 	@python3 $(SCRIPTS_DIR)/secret_scan.py $(SKILLS_DIR)
+	python3 $(SCRIPTS_DIR)/check_doc_skills.py
 endif
 
 list:

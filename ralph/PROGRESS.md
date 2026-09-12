@@ -547,3 +547,43 @@ checkout — no source files touched by this task besides the plan/progress
 notebook.
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 16
+
+Task: Wire `scripts/check_doc_skills.py` into the `validate` target of
+`Makefile`, after the secret scan.
+
+Added `python3 $(SCRIPTS_DIR)/check_doc_skills.py` on its own line right after
+the existing `@python3 $(SCRIPTS_DIR)/secret_scan.py $(SKILLS_DIR)` line,
+inside the `else` (no-`SKILL`) branch of the `validate` target. Left off the
+`@` prefix deliberately so make echoes the command line itself, since the
+verify command greps the whole `make validate` output for the literal string
+`check_doc_skills` and the script's own stdout only prints
+`<skill>: <route>` lines, never its own filename.
+
+Command run:
+```
+make validate; echo "exit: $?"
+make validate 2>&1 | grep -q check_doc_skills; echo "grep exit: $?"
+```
+Output:
+```
+Error: pyyaml required. Install with: pip install pyyaml
+[... 17 more identical pyyaml lines ...]
+Secret scan clean: skills/
+python3 scripts/check_doc_skills.py
+doc-writer: none
+docs-site-generator: none
+exec-doc-generator: assets/generate-pdf.mjs
+slide-deck-generator: assets/generate-pdf.mjs
+exit: 0
+---
+grep exit: 0
+```
+(pyyaml not installed in this environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`.)
+
+`git status --short` confirms only `Makefile` changed — inside the `Files
+touched` allowlist. `git diff Makefile` shows a single added line.
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.

@@ -88,6 +88,6 @@ ralph/PROGRESS.md
 
 - [x] Prove `scripts/check_doc_skills.py` is not green by construction. Verify: `printf 'x' >> skills/spectrocloud-poc-docs/references/templates/brand.css && python3 scripts/check_doc_skills.py` exits 1 and its output names that file, then `git checkout -- skills/spectrocloud-poc-docs/references/templates/brand.css && python3 scripts/check_doc_skills.py` exits 0.
 
-- [ ] Wire `scripts/check_doc_skills.py` into the `validate` target of `Makefile`, after the secret scan. Verify: `make validate` exits 0 and `make validate 2>&1 | grep -q check_doc_skills` exits 0.
+- [x] Wire `scripts/check_doc_skills.py` into the `validate` target of `Makefile`, after the secret scan. Verify: `make validate` exits 0 and `make validate 2>&1 | grep -q check_doc_skills` exits 0.
 
 - [ ] Confirm the new assets travel inside the packaged skill. Verify: `python3 scripts/package_skill.py skills/docs-site-generator` exits 0 and `python3 -c "import zipfile;print(zipfile.ZipFile('dist/docs-site-generator.skill').namelist())"` prints both `docs-site-generator/assets/brand.css` and `docs-site-generator/assets/mkdocs.yml.tmpl`.
