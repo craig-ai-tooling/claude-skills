@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
+
+:root {
+  --md-primary-fg-color: #1F7A78;
+  --md-primary-fg-color--light: #9EB277;
+  --md-primary-fg-color--dark: #005B5B;
+  --md-accent-fg-color: #F0BE65;
+  --md-default-bg-color: #F7F1ED;
+  --md-default-fg-color: #012121;
+  --md-typeset-a-color: #1F7A78;
+  --md-code-bg-color: #E0DCD7;    /* brand neutral-1 */
+}
+
+/* Admonition colors */
+.md-typeset .admonition.note,
+.md-typeset details.note {
+  border-color: #1F7A78;
+}
+.md-typeset .note > .admonition-title,
+.md-typeset .note > summary {
+  background-color: rgba(31, 122, 120, 0.1);
+}
+
+.md-typeset .admonition.warning,
+.md-typeset details.warning {
+  border-color: #B94B01;
+}
+.md-typeset .warning > .admonition-title,
+.md-typeset .warning > summary {
+  background-color: rgba(185, 75, 1, 0.1);
+}
+
+.md-typeset .admonition.tip,
+.md-typeset details.tip {
+  border-color: #9EB277;
+}
+.md-typeset .tip > .admonition-title,
+.md-typeset .tip > summary {
+  background-color: rgba(158, 178, 119, 0.1);
+}
+
+/* Navigation and header */
+.md-header {
+  background-color: #043736;
+}
+
+.md-tabs {
+  background-color: #005B5B;
+}
+
+.md-footer {
+  background-color: #043736;
+  color: #F7F1ED;
+}
+
+/* Dark mode — brand Ink/neutrals only. NEVER blue/purple (old brand). */
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #012121;  /* Ink */
+  --md-default-fg-color: #E0DCD7;  /* neutral-1 */
+  --md-code-bg-color: #1E3332;     /* dark neutral */
+}
