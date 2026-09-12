@@ -32,6 +32,11 @@ if [ -z "$site_name" ]; then
   exit 1
 fi
 
+if [ -d "$dest" ] && [ -n "$(ls -A "$dest" 2>/dev/null)" ]; then
+  echo "error: destination '$dest' already exists and is not empty; refusing to overwrite" >&2
+  exit 1
+fi
+
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 assets_dir="$script_dir/../assets"
 

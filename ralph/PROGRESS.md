@@ -148,3 +148,41 @@ environment; pre-existing per ground truth in
 `ralph/IMPLEMENTATION_PLAN.md`).
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 6
+
+Task: Make `skills/docs-site-generator/scripts/scaffold_docs_site.sh` refuse a
+destination that already exists and is non-empty, printing why, rather than
+clobbering it. Added a guard before the `mkdir -p`/write steps: if `$dest`
+exists and `ls -A "$dest"` is non-empty, print an `error:` line to stderr and
+exit 1.
+
+Command run:
+```
+bash -n skills/docs-site-generator/scripts/scaffold_docs_site.sh; echo "syntax check: $?"
+rm -rf dist/t && bash skills/docs-site-generator/scripts/scaffold_docs_site.sh dist/t --site-name Acme; echo "first run exit: $?"
+before=$(md5sum dist/t/mkdocs.yml)
+bash skills/docs-site-generator/scripts/scaffold_docs_site.sh dist/t --site-name Acme; echo "second run exit (expect nonzero): $?"
+after=$(md5sum dist/t/mkdocs.yml)
+echo "before: $before"
+echo "after:  $after"
+[ "$before" = "$after" ] && echo "MATCH" || echo "MISMATCH"
+```
+Output:
+```
+syntax check: 0
+first run exit: 0
+error: destination 'dist/t' already exists and is not empty; refusing to overwrite
+second run exit (expect nonzero): 1
+before: f0aa3160f74bb91c4d4b5a3727b43a9f  dist/t/mkdocs.yml
+after:  f0aa3160f74bb91c4d4b5a3727b43a9f  dist/t/mkdocs.yml
+MATCH
+```
+
+Also ran `make validate` (from repo root): exited 0. Output was 18
+pre-existing `Error: pyyaml required. Install with: pip install pyyaml`
+lines followed by `Secret scan clean: skills/` (pyyaml not installed in this
+environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
