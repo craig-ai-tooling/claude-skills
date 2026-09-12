@@ -186,3 +186,34 @@ environment; pre-existing per ground truth in
 `ralph/IMPLEMENTATION_PLAN.md`).
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 7
+
+Task: Leave no unfilled token in scaffolded output. Audited the existing
+`mkdocs.yml.tmpl`, `index.md.tmpl` and `scaffold_docs_site.sh` from earlier
+iterations: the script already runs `sed "s|__SITE_NAME__|$site_name|g"` over
+both templates and copies `brand.css` (which carries no token at all)
+verbatim, so this assertion already held with no source change needed.
+
+Command run:
+```
+rm -rf dist/t && bash skills/docs-site-generator/scripts/scaffold_docs_site.sh dist/t --site-name Acme
+grep -rn '{{' dist/t; echo "grep1 exit (expect 1): $?"
+grep -rn '__SITE_NAME__' dist/t; echo "grep2 exit (expect 1): $?"
+```
+Output:
+```
+grep1 exit (expect 1): 1
+grep2 exit (expect 1): 1
+```
+
+Also ran `make validate` (from repo root): exited 0. Output was 18
+pre-existing `Error: pyyaml required. Install with: pip install pyyaml`
+lines followed by `Secret scan clean: skills/` (pyyaml not installed in this
+environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+Cleaned up scratch dirs `dist/t` and `dist/vc-site` afterward (both
+gitignored).
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.

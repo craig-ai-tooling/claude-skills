@@ -70,7 +70,7 @@ ralph/PROGRESS.md
 
 - [x] Make `skills/docs-site-generator/scripts/scaffold_docs_site.sh` refuse a destination that already exists and is non-empty, printing why, rather than clobbering it. Verify: with `dist/t` already scaffolded, re-running the same command exits non-zero and `md5sum dist/t/mkdocs.yml` prints the same digest before and after; `bash -n skills/docs-site-generator/scripts/scaffold_docs_site.sh` exits 0.
 
-- [ ] Leave no unfilled token in scaffolded output. Verify: after `rm -rf dist/t && bash skills/docs-site-generator/scripts/scaffold_docs_site.sh dist/t --site-name Acme`, both `grep -rn '{{' dist/t` and `grep -rn '__SITE_NAME__' dist/t` exit 1.
+- [x] Leave no unfilled token in scaffolded output. Verify: after `rm -rf dist/t && bash skills/docs-site-generator/scripts/scaffold_docs_site.sh dist/t --site-name Acme`, both `grep -rn '{{' dist/t` and `grep -rn '__SITE_NAME__' dist/t` exit 1.
 
 - [ ] Cut the `mkdocs.yml`, `brand.css` and landing-page fenced blocks out of `skills/docs-site-generator/SKILL.md` and replace each with a short pointer to the scaffolder and to `assets/`. Verify: `grep -q 'scripts/scaffold_docs_site.sh' skills/docs-site-generator/SKILL.md` exits 0 and `python3 scripts/quick_validate.py skills/docs-site-generator` exits 0.
 
