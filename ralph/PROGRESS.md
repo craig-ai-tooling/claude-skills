@@ -35,3 +35,33 @@ not installed in this environment; those errors are pre-existing and the
 target still exits 0, per `ralph/IMPLEMENTATION_PLAN.md`'s ground truth).
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 2
+
+Task: Overwrite `skills/spectrocloud-poc-docs/references/templates/brand.css`
+with a byte-identical copy of the new `skills/docs-site-generator/assets/brand.css`,
+retiring its blue/purple dark mode.
+
+Diff before overwrite (`diff skills/docs-site-generator/assets/brand.css
+skills/spectrocloud-poc-docs/references/templates/brand.css`) showed the old
+file still used `--md-code-bg-color: #f5f0eb;` and dark-mode colors
+`#1a1a2e`, `#e0e0e0`, `#2d2d44` instead of the Ink/neutral brand values.
+
+Command run: `cp skills/docs-site-generator/assets/brand.css
+skills/spectrocloud-poc-docs/references/templates/brand.css`, then:
+```
+cmp -s skills/docs-site-generator/assets/brand.css skills/spectrocloud-poc-docs/references/templates/brand.css
+echo "cmp exit: $?"
+```
+Output:
+```
+cmp exit: 0
+```
+
+Also ran `make validate` (from repo root): exited 0. Output was 18
+pre-existing `Error: pyyaml required. Install with: pip install pyyaml`
+lines followed by `Secret scan clean: skills/` (pyyaml not installed in this
+environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.

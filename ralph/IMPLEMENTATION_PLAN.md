@@ -60,7 +60,7 @@ ralph/PROGRESS.md
 
 - [x] Create `skills/docs-site-generator/assets/brand.css` from the stylesheet block in that skill's `SKILL.md`, keeping the Ink/neutral dark mode (`#012121`, `#E0DCD7`, `#1E3332`). Verify: `grep -q '#1F7A78' skills/docs-site-generator/assets/brand.css` exits 0 and `grep -Eq '1a1a2e|2d2d44' skills/docs-site-generator/assets/brand.css` exits 1.
 
-- [ ] Overwrite `skills/spectrocloud-poc-docs/references/templates/brand.css` with a byte-identical copy of the new `skills/docs-site-generator/assets/brand.css`, retiring its blue/purple dark mode. Verify: `cmp -s skills/docs-site-generator/assets/brand.css skills/spectrocloud-poc-docs/references/templates/brand.css` exits 0.
+- [x] Overwrite `skills/spectrocloud-poc-docs/references/templates/brand.css` with a byte-identical copy of the new `skills/docs-site-generator/assets/brand.css`, retiring its blue/purple dark mode. Verify: `cmp -s skills/docs-site-generator/assets/brand.css skills/spectrocloud-poc-docs/references/templates/brand.css` exits 0.
 
 - [ ] Create `skills/docs-site-generator/assets/mkdocs.yml.tmpl` from the `mkdocs.yml` block in that skill's `SKILL.md`, using `__SITE_NAME__` as the one substitution token. Verify: `grep -q '__SITE_NAME__' skills/docs-site-generator/assets/mkdocs.yml.tmpl` exits 0 and `grep -q '{{' skills/docs-site-generator/assets/mkdocs.yml.tmpl` exits 1.
 
