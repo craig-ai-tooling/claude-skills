@@ -380,3 +380,45 @@ environment; pre-existing per ground truth in
 allowlist.
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 12
+
+Task: Rewrite the render step in `skills/exec-doc-generator/references/puppeteer-render.md`
+and in both skills' `SKILL.md` to run the shipped script instead of retyping
+the code.
+
+Replaced the `generate-pdf.mjs` section's two fenced `javascript` code blocks
+(Letter-format and 16:9 variants) in `puppeteer-render.md` with prose naming
+the two shipped scripts (`exec-doc-generator/assets/generate-pdf.mjs`,
+`slide-deck-generator/assets/generate-pdf.mjs`), their CLI usage, and the one
+`page.pdf()` option difference between them. Updated the "Puppeteer
+Rendering" section of `skills/exec-doc-generator/SKILL.md` and the "PDF
+Generation & Puppeteer Gotchas" section of `skills/slide-deck-generator/SKILL.md`
+to point at `node assets/generate-pdf.mjs <input.html> <output.pdf>` instead
+of directing the agent to the fenced code that no longer exists.
+
+Command run:
+```
+grep -q 'assets/generate-pdf.mjs' skills/exec-doc-generator/SKILL.md; echo "grep1 exit: $?"
+grep -q 'assets/generate-pdf.mjs' skills/slide-deck-generator/SKILL.md; echo "grep2 exit: $?"
+make validate; echo "make validate exit: $?"
+```
+Output:
+```
+grep1 exit: 0
+grep2 exit: 0
+```
+followed by 18 pre-existing `Error: pyyaml required. Install with: pip
+install pyyaml` lines, then `Secret scan clean: skills/`, then:
+```
+make validate exit: 0
+```
+(pyyaml not installed in this environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+`git status --short` confirms only `skills/exec-doc-generator/SKILL.md`,
+`skills/exec-doc-generator/references/puppeteer-render.md` and
+`skills/slide-deck-generator/SKILL.md` changed — inside the `Files touched`
+allowlist.
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.

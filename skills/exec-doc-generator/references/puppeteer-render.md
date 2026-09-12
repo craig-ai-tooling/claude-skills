@@ -51,45 +51,9 @@ Letters with enclosed counters (p, o, e, d, b, a, g, C) need the outer shape and
 
 ## generate-pdf.mjs
 
-Always create the script alongside the HTML. Ensure `package.json` has `puppeteer` as a dependency and run `npm install` before generating.
+Don't retype the render script — run the one each skill ships. Ensure `puppeteer` is installed (`npm install puppeteer`) before generating.
 
-### Letter-format document (exec docs)
+- **Letter-format document (exec docs):** `node exec-doc-generator/assets/generate-pdf.mjs <input.html> <output.pdf>`
+- **16:9 slide deck:** `node slide-deck-generator/assets/generate-pdf.mjs <input.html> <output.pdf>`
 
-```javascript
-import puppeteer from 'puppeteer';
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const htmlPath = path.join(__dirname, 'OUTPUT_NAME.html');
-const pdfPath = path.join(__dirname, 'OUTPUT_NAME.pdf');
-
-const browser = await puppeteer.launch({ headless: true });
-const page = await browser.newPage();
-await page.goto(`file://${htmlPath}`, { waitUntil: 'networkidle0', timeout: 30000 });
-await page.pdf({
-  path: pdfPath,
-  format: 'letter',
-  printBackground: true,
-  margin: { top: '20px', right: '28px', bottom: '20px', left: '28px' },
-});
-await browser.close();
-console.log(`PDF generated: ${pdfPath}`);
-```
-
-### 16:9 slide deck
-
-Same script with a viewport and fixed page size instead of `format`:
-
-```javascript
-await page.setViewport({ width: 1280, height: 720 });
-await page.goto(`file://${htmlPath}`, { waitUntil: 'networkidle0', timeout: 30000 });
-await page.pdf({
-  path: pdfPath,
-  width: '1280px',
-  height: '720px',
-  printBackground: true,
-  landscape: true,
-  margin: { top: 0, right: 0, bottom: 0, left: 0 },
-});
-```
+Both take the input HTML path and desired output PDF path as arguments and print `usage: ...` to stderr and exit 1 if either is missing. They differ only in `page.pdf()` options: the exec-doc script uses `format: 'letter'` with small margins; the slide-deck script sets a `1280x720` viewport and calls `page.pdf` with matching `width`/`height`, `landscape: true`, and zero margins.

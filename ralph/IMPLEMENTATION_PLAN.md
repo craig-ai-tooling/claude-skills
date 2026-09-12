@@ -80,7 +80,7 @@ ralph/PROGRESS.md
 
 - [x] Create `skills/slide-deck-generator/assets/generate-pdf.mjs` from the 16:9 variant in that same reference, with the same dynamic-import and no-argument usage behaviour. Verify: `node --check skills/slide-deck-generator/assets/generate-pdf.mjs` exits 0, `node skills/slide-deck-generator/assets/generate-pdf.mjs` exits 1 with stderr starting `usage:` and no `ERR_MODULE_NOT_FOUND`.
 
-- [ ] Rewrite the render step in `skills/exec-doc-generator/references/puppeteer-render.md` and in both skills' `SKILL.md` to run the shipped script instead of retyping the code. Verify: `grep -q 'assets/generate-pdf.mjs' skills/exec-doc-generator/SKILL.md` exits 0, `grep -q 'assets/generate-pdf.mjs' skills/slide-deck-generator/SKILL.md` exits 0, and `make validate` exits 0.
+- [x] Rewrite the render step in `skills/exec-doc-generator/references/puppeteer-render.md` and in both skills' `SKILL.md` to run the shipped script instead of retyping the code. Verify: `grep -q 'assets/generate-pdf.mjs' skills/exec-doc-generator/SKILL.md` exits 0, `grep -q 'assets/generate-pdf.mjs' skills/slide-deck-generator/SKILL.md` exits 0, and `make validate` exits 0.
 
 - [ ] Add exactly one line starting `PDF route: ` to each of the four document skills' `SKILL.md` — `doc-writer` and `docs-site-generator` declare no PDF route, the other two name `assets/generate-pdf.mjs`. Verify: `grep -q '^PDF route: ' skills/doc-writer/SKILL.md` exits 0, and the same holds for docs-site-generator, exec-doc-generator and slide-deck-generator.
 

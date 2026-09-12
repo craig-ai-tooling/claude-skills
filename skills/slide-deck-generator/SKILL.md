@@ -254,7 +254,9 @@ Do NOT use the old 148x57 `spectrocloud-logo-horizontal.svg` — its letter coun
 
 ## PDF Generation & Puppeteer Gotchas
 
-READ `exec-doc-generator/references/puppeteer-render.md` — the canonical render reference shared by both PDF generators. It covers font loading via `<link>`, `-webkit-print-color-adjust: exact`, emoji flex-centering, SVG compound-path rules, and the full `generate-pdf.mjs` script (use the **16:9 slide deck** variant: 1280x720 viewport, fixed page size, landscape, zero margins). Deck-specific rule: each `.slide` gets `page-break-after: always` except the last.
+READ `exec-doc-generator/references/puppeteer-render.md` — the canonical render reference shared by both PDF generators. It covers font loading via `<link>`, `-webkit-print-color-adjust: exact`, emoji flex-centering, and SVG compound-path rules. Deck-specific rule: each `.slide` gets `page-break-after: always` except the last.
+
+Render with the shipped script instead of retyping it: `node assets/generate-pdf.mjs <input.html> <output.pdf>` (1280x720 viewport, fixed page size, landscape, zero margins).
 
 ## Co-branding with Customer Colors
 
