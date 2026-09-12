@@ -1,6 +1,6 @@
 ---
 name: exec-doc-generator
-description: Generate polished 2-page executive PDF documents (HTML+Puppeteer). Merges customer brand colors with Spectro Cloud branding. Pinned footers, stat cards, timelines, and professional layouts.
+description: Generate a polished 1-2 page executive PDF (HTML rendered via Puppeteer), merging customer brand colors with Spectro Cloud branding -- pinned footers, stat cards, timelines, and professional layouts. Owns the short executive PDF only -- for a long-form writeup use doc-writer, for a multi-page docs site use docs-site-generator, and for a slide deck (rendered PDF or a Google Slides link) use slide-deck-generator. See the Deliverable Routing table in doc-writer.
 ---
 
 # Executive Document Generator
@@ -14,6 +14,8 @@ Build polished, executive-grade 2-page PDF documents as HTML files rendered via 
 - User asks for an executive summary, POC overview, or customer-facing doc
 - User wants a "nice looking" or "PDF" document for a customer
 - Building deliverables for customer leadership or stakeholders
+
+Not this deliverable? See the Deliverable Routing table in the `doc-writer` skill: it covers long-form writeups, multi-page docs sites, and slide decks (PDF or Google Slides).
 
 ## Design System
 

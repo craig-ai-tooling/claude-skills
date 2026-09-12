@@ -1,6 +1,6 @@
 ---
 name: doc-writer
-description: Generate long-form branded Spectro Cloud documents -- customer assessments, solution briefs, technical writeups, POC reports, and migration plans. Outputs Markdown with YAML frontmatter, brand-consistent formatting, and co-branding support.
+description: Generate long-form branded Spectro Cloud documents -- customer assessments, solution briefs, technical writeups, POC reports, and migration plans -- as Markdown with YAML frontmatter, brand-consistent formatting, and co-branding support. Owns long-form writeups only -- for a 1-2 page executive PDF use exec-doc-generator, for a multi-page docs site use docs-site-generator, and for a slide deck (rendered PDF or a Google Slides link) use slide-deck-generator. See this skill's Deliverable Routing table for all four.
 ---
 
 # Spectro Cloud Document Writer
@@ -18,6 +18,20 @@ Generate polished, long-form documents for Spectro Cloud customer engagements. O
 - Technical Architecture -- detailed design for a proposed or active deployment
 - POC Report -- document findings, results, and next steps from a proof of concept
 - Migration Plan -- phased plan for moving workloads to Palette (often VMware exit)
+
+## Deliverable Routing
+
+Four skills answer "make me a doc." Each deliverable shape has exactly one owner -- pick the row that matches what is being handed to the reader, not which skill happens to be loaded:
+
+| Deliverable shape | Owning skill | Artifact |
+|---|---|---|
+| Long-form writeup (assessment, solution brief, architecture, POC report, migration plan) | doc-writer (this skill) | Markdown file with YAML frontmatter |
+| 1-2 page executive PDF | exec-doc-generator | PDF, HTML rendered via Puppeteer |
+| Multi-page navigable docs site | docs-site-generator | MkDocs Material or Docusaurus site (Markdown + nav config) |
+| Projected slide deck, shared as PDF | slide-deck-generator | PDF, 16:9 HTML rendered via Puppeteer |
+| Projected slide deck, shared as an editable link | slide-deck-generator | Google Slides presentation (copied from the 2026 Corporate Template via `gws`), returned as a `docs.google.com/presentation` link |
+
+An exec PDF or slide deck is usually cut from a doc-writer Markdown source after the fact -- write the long-form doc first when the detail does not already exist, then hand it to the owning skill for the shorter format.
 
 ## Output Format
 

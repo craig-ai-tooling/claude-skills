@@ -1,6 +1,6 @@
 ---
 name: slide-deck-generator
-description: Generate branded Spectro Cloud presentation slide decks as HTML rendered via Puppeteer. 16:9 landscape slides with title, divider, content, quote, timeline, table, and closing layouts. References spectrocloud-brand for colors, typography, and logos.
+description: Generate a branded Spectro Cloud presentation slide deck -- either 16:9 HTML rendered to PDF via Puppeteer (title, divider, content, quote, timeline, table, and closing layouts) or a Google Slides deck with a shareable link, copied and filled from the 2026 Corporate Template via gws. References spectrocloud-brand for colors, typography, and logos. Owns projected decks only -- for a long-form writeup use doc-writer, for a 1-2 page executive PDF use exec-doc-generator, and for a multi-page docs site use docs-site-generator. See the Deliverable Routing table in doc-writer.
 ---
 
 # Slide Deck Generator
@@ -15,6 +15,9 @@ Build branded presentation slide decks as HTML files rendered to PDF via Puppete
 - User wants a "deck" or "pitch" for a customer or internal audience
 - Building materials for meetings, QBRs, webinars, or conferences
 - Any request that implies multiple sequential visual pages meant for projection or screen sharing
+- Two output forms live here: a rendered PDF (see PDF Generation below) or an editable Google Slides link (see Google Slides Output below)
+
+Not this deliverable? See the Deliverable Routing table in the `doc-writer` skill: it covers long-form writeups, 1-2 page executive PDFs, and multi-page docs sites.
 
 ## Brand Foundation
 
@@ -259,6 +262,45 @@ Do NOT use the old 148x57 `spectrocloud-logo-horizontal.svg` — its letter coun
 READ `exec-doc-generator/references/puppeteer-render.md` — the canonical render reference shared by both PDF generators. It covers font loading via `<link>`, `-webkit-print-color-adjust: exact`, emoji flex-centering, and SVG compound-path rules. Deck-specific rule: each `.slide` gets `page-break-after: always` except the last.
 
 Render with the shipped script instead of retyping it: `node assets/generate-pdf.mjs <input.html> <output.pdf>` (1280x720 viewport, fixed page size, landscape, zero margins).
+
+## Google Slides Output
+
+Use this path when the ask is a Google Slides deck with a link, not a PDF. It copies the 2026 Corporate Template -- ID recorded in `spectrocloud-brand/SKILL.md` under "Key Template IDs (Google Slides)" -- and fills it via the Slides API. All commands are `gws`; every one below takes `--dry-run` (validates the request locally, prints the would-be HTTP call, contacts nothing) -- run new request shapes with `--dry-run` first, and never run the real thing without Craig's go-ahead in the moment, since this touches his live Google account and creates a real file.
+
+1. **Copy the template** into Craig's Drive:
+
+   ```bash
+   gws drive files copy --params '{"fileId": "1A9rjKI8K831PrvQoNX5XerRCRKBpHXKySpNlcJGiZko"}' \
+     --json '{"name": "<Customer> - <Title> - 2026"}'
+   ```
+
+   The response `id` is `<presentationId>` for every step below.
+
+2. **Read the copy's layout** so text replacements target real placeholders and real page/element IDs:
+
+   ```bash
+   gws slides presentations get --params '{"presentationId": "<presentationId>"}'
+   ```
+
+3. **Fill it in** with one `batchUpdate` -- `replaceAllText` for templated placeholders (e.g. `{{CUSTOMER}}`), `insertText`/`deleteText` against specific object IDs from step 2 for anything not templated:
+
+   ```bash
+   gws slides presentations batchUpdate --params '{"presentationId": "<presentationId>"}' \
+     --json '{"requests": [{"replaceAllText": {"containsText": {"text": "{{CUSTOMER}}", "matchCase": true}, "replaceText": "<Customer Name>"}}]}'
+   ```
+
+4. **Hand back the link.** The copy already belongs to Craig, so no extra sharing step is needed to open it himself:
+
+   `https://docs.google.com/presentation/d/<presentationId>/edit`
+
+   Only add a permission if the recipient needs access and does not already have it -- e.g. link-only viewing:
+
+   ```bash
+   gws drive permissions create --params '{"fileId": "<presentationId>"}' \
+     --json '{"type": "anyone", "role": "reader"}'
+   ```
+
+   Never widen sharing beyond what was actually asked for.
 
 ## Co-branding with Customer Colors
 
