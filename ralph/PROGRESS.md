@@ -337,3 +337,46 @@ environment; pre-existing per ground truth in
 `git status --short` confirmed no source files needed changes for this task.
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 11
+
+Task: Create `skills/slide-deck-generator/assets/generate-pdf.mjs` from the
+16:9 variant in `skills/exec-doc-generator/references/puppeteer-render.md`,
+with the same dynamic-import and no-argument usage behaviour as
+`skills/exec-doc-generator/assets/generate-pdf.mjs`.
+
+Wrote `skills/slide-deck-generator/assets/generate-pdf.mjs`, mirroring the
+exec-doc-generator script's argument check and `usage:` stderr line, its
+dynamic `await import('puppeteer')` placed only after that check, but with
+the 16:9 slide-deck variant from the reference doc's "16:9 slide deck"
+section: `page.setViewport({ width: 1280, height: 720 })` before `page.goto`,
+and `page.pdf` called with `width`/`height`/`landscape: true`/zero margins
+instead of the Letter variant's `format: 'letter'`.
+
+Commands run:
+```
+node --check skills/slide-deck-generator/assets/generate-pdf.mjs; echo "check exit: $?"
+node skills/slide-deck-generator/assets/generate-pdf.mjs; echo "run exit: $?"
+node skills/slide-deck-generator/assets/generate-pdf.mjs 2>&1 1>/dev/null | head -1
+node skills/slide-deck-generator/assets/generate-pdf.mjs 2>&1 | grep -q ERR_MODULE_NOT_FOUND; echo "ERR_MODULE_NOT_FOUND grep exit (expect 1): $?"
+```
+Output:
+```
+check exit: 0
+usage: node generate-pdf.mjs <input.html> <output.pdf>
+run exit: 1
+usage: node generate-pdf.mjs <input.html> <output.pdf>
+ERR_MODULE_NOT_FOUND grep exit (expect 1): 1
+```
+
+Also ran `make validate` (from repo root): exited 0. Output was 18
+pre-existing `Error: pyyaml required. Install with: pip install pyyaml`
+lines followed by `Secret scan clean: skills/` (pyyaml not installed in this
+environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+`git status --short` confirms only `skills/slide-deck-generator/assets/`
+(the new `generate-pdf.mjs`) is untracked — inside the `Files touched`
+allowlist.
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
