@@ -217,3 +217,52 @@ Cleaned up scratch dirs `dist/t` and `dist/vc-site` afterward (both
 gitignored).
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 8
+
+Task: Cut the `mkdocs.yml`, `brand.css` and landing-page fenced blocks out of
+`skills/docs-site-generator/SKILL.md` and replace each with a short pointer to
+the scaffolder and to `assets/`.
+
+Replaced the "MkDocs Material Configuration" fenced `yaml` block (baseline
+`mkdocs.yml`) and the "MkDocs Brand CSS" fenced `css` block with a short
+paragraph pointing at `assets/mkdocs.yml.tmpl` / `assets/brand.css` and
+`scripts/scaffold_docs_site.sh`. Replaced the "index.md (Landing Page)" fenced
+`markdown` block the same way, pointing at `assets/index.md.tmpl`. Left the
+Docusaurus config/CSS blocks and every other section untouched — only the
+three blocks named in the task moved out.
+
+Command run:
+```
+grep -q 'scripts/scaffold_docs_site.sh' skills/docs-site-generator/SKILL.md; echo "grep exit: $?"
+python3 scripts/quick_validate.py skills/docs-site-generator; echo "quick_validate exit: $?"
+```
+Output:
+```
+grep exit: 0
+Error: pyyaml required. Install with: pip install pyyaml
+quick_validate exit: 1
+```
+
+`quick_validate.py` fails on `import yaml` before it reads any argument at
+all — confirmed this is unconditional (same error for any skill path,
+unrelated to this edit) and unfixable from inside the repo: no `pip`/`pip3`
+binary exists in this environment (`python3 -m pip --version` →
+`No module named pip`), and `apt-get install python3-yaml` fails because the
+sandbox user `ralph` has no `dpkg` lock permission and there is no `sudo`
+binary. No vendored `yaml` module or wheel exists anywhere on the filesystem
+either. This is the same pre-existing pyyaml gap iterations 1-7 already hit
+through `make validate`'s per-skill loop; this task is the first to invoke
+`quick_validate.py` directly on one path, where the loop's private-skills/
+glob quirk that otherwise masks the failure doesn't apply, so the raw exit 1
+is visible here instead of being absorbed.
+
+Also ran `make validate` (from repo root): exited 0, same 18 pre-existing
+`Error: pyyaml required.` lines followed by `Secret scan clean: skills/`.
+`skills/docs-site-generator/SKILL.md` is now 262 lines (was 428), well under
+quick_validate's 500-line cap once pyyaml is available to check it.
+
+`git diff --stat` confirms only `skills/docs-site-generator/SKILL.md`
+changed (172 lines removed, 3 added) — inside the `Files touched` allowlist.
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
