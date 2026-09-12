@@ -117,3 +117,34 @@ not installed in this environment; those errors are pre-existing and the
 target still exits 0, per `ralph/IMPLEMENTATION_PLAN.md`'s ground truth).
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 5
+
+Task: Create `skills/docs-site-generator/scripts/scaffold_docs_site.sh` taking
+`<dest> --site-name <name>`. It writes the three asset files into `<dest>` as
+`mkdocs.yml`, `docs/index.md` and `docs/overrides/stylesheets/brand.css`,
+substituting `__SITE_NAME__` in the two templated files (`brand.css` has no
+token, so it is copied as-is).
+
+Command run:
+```
+bash -n skills/docs-site-generator/scripts/scaffold_docs_site.sh; echo "syntax check: $?"
+rm -rf dist/t && bash skills/docs-site-generator/scripts/scaffold_docs_site.sh dist/t --site-name Acme; echo "run exit: $?"
+find dist/t -type f
+```
+Output:
+```
+syntax check: 0
+run exit: 0
+dist/t/mkdocs.yml
+dist/t/docs/index.md
+dist/t/docs/overrides/stylesheets/brand.css
+```
+
+Also ran `make validate` (from repo root): exited 0. Output was 18
+pre-existing `Error: pyyaml required. Install with: pip install pyyaml`
+lines followed by `Secret scan clean: skills/` (pyyaml not installed in this
+environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
