@@ -1,0 +1,74 @@
+site_name: __SITE_NAME__
+site_description: Documentation portal
+site_url: https://docs.example.com
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  logo: assets/images/spectrocloud-logo-white.svg
+  favicon: assets/images/favicon.png
+  font:
+    text: Plus Jakarta Sans
+    code: JetBrains Mono
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+
+extra_css:
+  - overrides/stylesheets/brand.css
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Architecture:
+    - Overview: architecture/index.md
+    - Components: architecture/components.md
+  - Operations:
+    - Overview: operations/index.md
+    - Deployment: operations/deployment.md
+    - Monitoring: operations/monitoring.md
+  - Troubleshooting:
+    - Common Issues: troubleshooting/index.md
+    - Runbooks: troubleshooting/runbooks.md
+  - Reference:
+    - Overview: reference/index.md
+    - API: reference/api.md
+    - Configuration: reference/configuration.md

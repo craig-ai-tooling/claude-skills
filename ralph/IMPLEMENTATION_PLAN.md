@@ -62,7 +62,7 @@ ralph/PROGRESS.md
 
 - [x] Overwrite `skills/spectrocloud-poc-docs/references/templates/brand.css` with a byte-identical copy of the new `skills/docs-site-generator/assets/brand.css`, retiring its blue/purple dark mode. Verify: `cmp -s skills/docs-site-generator/assets/brand.css skills/spectrocloud-poc-docs/references/templates/brand.css` exits 0.
 
-- [ ] Create `skills/docs-site-generator/assets/mkdocs.yml.tmpl` from the `mkdocs.yml` block in that skill's `SKILL.md`, using `__SITE_NAME__` as the one substitution token. Verify: `grep -q '__SITE_NAME__' skills/docs-site-generator/assets/mkdocs.yml.tmpl` exits 0 and `grep -q '{{' skills/docs-site-generator/assets/mkdocs.yml.tmpl` exits 1.
+- [x] Create `skills/docs-site-generator/assets/mkdocs.yml.tmpl` from the `mkdocs.yml` block in that skill's `SKILL.md`, using `__SITE_NAME__` as the one substitution token. Verify: `grep -q '__SITE_NAME__' skills/docs-site-generator/assets/mkdocs.yml.tmpl` exits 0 and `grep -q '{{' skills/docs-site-generator/assets/mkdocs.yml.tmpl` exits 1.
 
 - [ ] Create `skills/docs-site-generator/assets/index.md.tmpl` from the landing-page block in that skill's `SKILL.md`, using `__SITE_NAME__` as the one substitution token. Verify: `grep -q '__SITE_NAME__' skills/docs-site-generator/assets/index.md.tmpl` exits 0 and `grep -q '{{' skills/docs-site-generator/assets/index.md.tmpl` exits 1.
 

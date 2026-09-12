@@ -65,3 +65,29 @@ environment; pre-existing per ground truth in
 `ralph/IMPLEMENTATION_PLAN.md`).
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 3
+
+Task: Create `skills/docs-site-generator/assets/mkdocs.yml.tmpl` from the
+`mkdocs.yml` block in that skill's `SKILL.md` (lines 105-180), using
+`__SITE_NAME__` as the one substitution token in place of
+`site_name: Project Documentation`.
+
+Command run:
+```
+grep -q '__SITE_NAME__' skills/docs-site-generator/assets/mkdocs.yml.tmpl; echo "grep1 exit: $?"
+grep -q '{{' skills/docs-site-generator/assets/mkdocs.yml.tmpl; echo "grep2 exit (expect 1): $?"
+```
+Output:
+```
+grep1 exit: 0
+grep2 exit (expect 1): 1
+```
+
+Also ran `make validate` (from repo root): exited 0. Output ended with
+`Secret scan clean: skills/` after 18 pre-existing `Error: pyyaml required.
+Install with: pip install pyyaml` lines from `quick_validate.py` (pyyaml is
+not installed in this environment; those errors are pre-existing and the
+target still exits 0, per `ralph/IMPLEMENTATION_PLAN.md`'s ground truth).
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
