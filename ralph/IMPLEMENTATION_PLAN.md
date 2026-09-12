@@ -84,7 +84,7 @@ ralph/PROGRESS.md
 
 - [x] Add exactly one line starting `PDF route: ` to each of the four document skills' `SKILL.md` — `doc-writer` and `docs-site-generator` declare no PDF route, the other two name `assets/generate-pdf.mjs`. Verify: `grep -q '^PDF route: ' skills/doc-writer/SKILL.md` exits 0, and the same holds for docs-site-generator, exec-doc-generator and slide-deck-generator.
 
-- [ ] Create `scripts/check_doc_skills.py`: print one `<skill>: <route>` line for each of the four document skills read from their `PDF route: ` line, and exit 1 naming the offending file when a skill has zero or several such lines, or when the two `brand.css` copies are not byte-identical. Verify: `python3 scripts/check_doc_skills.py` exits 0 and prints 4 lines.
+- [x] Create `scripts/check_doc_skills.py`: print one `<skill>: <route>` line for each of the four document skills read from their `PDF route: ` line, and exit 1 naming the offending file when a skill has zero or several such lines, or when the two `brand.css` copies are not byte-identical. Verify: `python3 scripts/check_doc_skills.py` exits 0 and prints 4 lines.
 
 - [ ] Prove `scripts/check_doc_skills.py` is not green by construction. Verify: `printf 'x' >> skills/spectrocloud-poc-docs/references/templates/brand.css && python3 scripts/check_doc_skills.py` exits 1 and its output names that file, then `git checkout -- skills/spectrocloud-poc-docs/references/templates/brand.css && python3 scripts/check_doc_skills.py` exits 0.
 

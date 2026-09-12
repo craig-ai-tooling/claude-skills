@@ -461,3 +461,44 @@ environment; pre-existing per ground truth in
 — inside the `Files touched` allowlist.
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 14
+
+Task: Create `scripts/check_doc_skills.py`: print one `<skill>: <route>` line
+for each of the four document skills read from their `PDF route: ` line, and
+exit 1 naming the offending file when a skill has zero or several such lines,
+or when the two `brand.css` copies are not byte-identical.
+
+Wrote `scripts/check_doc_skills.py`. It reads `skills/<skill>/SKILL.md` for
+each of `doc-writer`, `docs-site-generator`, `exec-doc-generator`,
+`slide-deck-generator`, collects every line starting `PDF route: `, and fails
+naming the SKILL.md path if that count is not exactly 1. It then prints
+`<skill>: <route>` for each skill that passed, and separately compares
+`skills/docs-site-generator/assets/brand.css` against
+`skills/spectrocloud-poc-docs/references/templates/brand.css` with
+`filecmp.cmp(..., shallow=False)`, failing and naming the second path if they
+differ (or either is missing).
+
+Command run:
+```
+python3 scripts/check_doc_skills.py; echo "exit: $?"
+```
+Output:
+```
+doc-writer: none
+docs-site-generator: none
+exec-doc-generator: assets/generate-pdf.mjs
+slide-deck-generator: assets/generate-pdf.mjs
+exit: 0
+```
+
+Also ran `make validate` (from repo root): exited 0. Output was 18
+pre-existing `Error: pyyaml required. Install with: pip install pyyaml`
+lines followed by `Secret scan clean: skills/` (pyyaml not installed in this
+environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+`git status --short` confirms only `scripts/check_doc_skills.py` is new —
+inside the `Files touched` allowlist.
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
