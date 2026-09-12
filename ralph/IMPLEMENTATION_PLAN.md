@@ -64,7 +64,7 @@ ralph/PROGRESS.md
 
 - [x] Create `skills/docs-site-generator/assets/mkdocs.yml.tmpl` from the `mkdocs.yml` block in that skill's `SKILL.md`, using `__SITE_NAME__` as the one substitution token. Verify: `grep -q '__SITE_NAME__' skills/docs-site-generator/assets/mkdocs.yml.tmpl` exits 0 and `grep -q '{{' skills/docs-site-generator/assets/mkdocs.yml.tmpl` exits 1.
 
-- [ ] Create `skills/docs-site-generator/assets/index.md.tmpl` from the landing-page block in that skill's `SKILL.md`, using `__SITE_NAME__` as the one substitution token. Verify: `grep -q '__SITE_NAME__' skills/docs-site-generator/assets/index.md.tmpl` exits 0 and `grep -q '{{' skills/docs-site-generator/assets/index.md.tmpl` exits 1.
+- [x] Create `skills/docs-site-generator/assets/index.md.tmpl` from the landing-page block in that skill's `SKILL.md`, using `__SITE_NAME__` as the one substitution token. Verify: `grep -q '__SITE_NAME__' skills/docs-site-generator/assets/index.md.tmpl` exits 0 and `grep -q '{{' skills/docs-site-generator/assets/index.md.tmpl` exits 1.
 
 - [ ] Create `skills/docs-site-generator/scripts/scaffold_docs_site.sh` taking `<dest> --site-name <name>`. It writes the three asset files into `<dest>` as `mkdocs.yml`, `docs/index.md` and `docs/overrides/stylesheets/brand.css`, substituting `__SITE_NAME__`. Verify: `rm -rf dist/t && bash skills/docs-site-generator/scripts/scaffold_docs_site.sh dist/t --site-name Acme` exits 0.
 
