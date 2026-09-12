@@ -86,7 +86,7 @@ ralph/PROGRESS.md
 
 - [x] Create `scripts/check_doc_skills.py`: print one `<skill>: <route>` line for each of the four document skills read from their `PDF route: ` line, and exit 1 naming the offending file when a skill has zero or several such lines, or when the two `brand.css` copies are not byte-identical. Verify: `python3 scripts/check_doc_skills.py` exits 0 and prints 4 lines.
 
-- [ ] Prove `scripts/check_doc_skills.py` is not green by construction. Verify: `printf 'x' >> skills/spectrocloud-poc-docs/references/templates/brand.css && python3 scripts/check_doc_skills.py` exits 1 and its output names that file, then `git checkout -- skills/spectrocloud-poc-docs/references/templates/brand.css && python3 scripts/check_doc_skills.py` exits 0.
+- [x] Prove `scripts/check_doc_skills.py` is not green by construction. Verify: `printf 'x' >> skills/spectrocloud-poc-docs/references/templates/brand.css && python3 scripts/check_doc_skills.py` exits 1 and its output names that file, then `git checkout -- skills/spectrocloud-poc-docs/references/templates/brand.css && python3 scripts/check_doc_skills.py` exits 0.
 
 - [ ] Wire `scripts/check_doc_skills.py` into the `validate` target of `Makefile`, after the secret scan. Verify: `make validate` exits 0 and `make validate 2>&1 | grep -q check_doc_skills` exits 0.
 

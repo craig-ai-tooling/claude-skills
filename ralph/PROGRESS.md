@@ -502,3 +502,48 @@ environment; pre-existing per ground truth in
 inside the `Files touched` allowlist.
 
 Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
+
+## Iteration 15
+
+Task: Prove `scripts/check_doc_skills.py` is not green by construction — that
+it actually fails when the two `brand.css` copies drift, not just when run
+as-is.
+
+No source change needed: `scripts/check_doc_skills.py` (written in iteration
+14) already compares the two `brand.css` files with `filecmp.cmp`. This task
+is purely a verification that the failure path really triggers.
+
+Command run:
+```
+printf 'x' >> skills/spectrocloud-poc-docs/references/templates/brand.css
+python3 scripts/check_doc_skills.py; echo "exit: $?"
+git checkout -- skills/spectrocloud-poc-docs/references/templates/brand.css
+python3 scripts/check_doc_skills.py; echo "exit: $?"
+```
+Output:
+```
+skills/spectrocloud-poc-docs/references/templates/brand.css: drifted from skills/docs-site-generator/assets/brand.css
+doc-writer: none
+docs-site-generator: none
+exec-doc-generator: assets/generate-pdf.mjs
+slide-deck-generator: assets/generate-pdf.mjs
+exit: 1
+---
+doc-writer: none
+docs-site-generator: none
+exec-doc-generator: assets/generate-pdf.mjs
+slide-deck-generator: assets/generate-pdf.mjs
+exit: 0
+```
+
+Also ran `make validate` (from repo root): exited 0. Output was 18
+pre-existing `Error: pyyaml required. Install with: pip install pyyaml`
+lines followed by `Secret scan clean: skills/` (pyyaml not installed in this
+environment; pre-existing per ground truth in
+`ralph/IMPLEMENTATION_PLAN.md`).
+
+`git status --short` confirms the working tree is clean after the
+checkout — no source files touched by this task besides the plan/progress
+notebook.
+
+Task ticked `- [x]` in `ralph/IMPLEMENTATION_PLAN.md`.
