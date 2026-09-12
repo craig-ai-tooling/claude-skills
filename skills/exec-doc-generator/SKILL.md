@@ -5,6 +5,8 @@ description: Generate polished 2-page executive PDF documents (HTML+Puppeteer). 
 
 # Executive Document Generator
 
+PDF route: assets/generate-pdf.mjs
+
 Build polished, executive-grade 2-page PDF documents as HTML files rendered via Puppeteer. Used for customer-facing POC overviews, solution summaries, architecture briefs, and similar deliverables.
 
 ## When to Use
@@ -199,7 +201,9 @@ Each page MUST be wrapped:
 
 ## Puppeteer Rendering
 
-READ `references/puppeteer-render.md` — the canonical render reference shared with `slide-deck-generator`. It covers the non-negotiables (font loading via `<link>`, `-webkit-print-color-adjust: exact`, `networkidle0`), emoji flex-centering, SVG compound-path/letter-counter rules, page-break rules, and the full `generate-pdf.mjs` script (use the **letter-format** variant for exec docs).
+READ `references/puppeteer-render.md` — the canonical render reference shared with `slide-deck-generator`. It covers the non-negotiables (font loading via `<link>`, `-webkit-print-color-adjust: exact`, `networkidle0`), emoji flex-centering, SVG compound-path/letter-counter rules, and page-break rules.
+
+Render with the shipped script instead of retyping it: `node assets/generate-pdf.mjs <input.html> <output.pdf>`.
 
 ## Workflow
 

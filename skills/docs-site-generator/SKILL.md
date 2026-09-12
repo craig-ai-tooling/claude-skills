@@ -5,6 +5,8 @@ description: Generate branded documentation sites with MkDocs Material or Docusa
 
 # Documentation Site Generator
 
+PDF route: none
+
 Generate complete documentation sites as a directory of Markdown files with navigation configuration and brand theming. Outputs are ready to build with MkDocs Material or Docusaurus.
 
 ## When to Use
@@ -100,150 +102,11 @@ Source the Spectro Cloud logos from the `spectrocloud-brand` skill or existing p
 
 ## MkDocs Material Configuration
 
-Use this as the baseline `mkdocs.yml`. Adjust `site_name`, `nav`, and `repo_url` per project.
-
-```yaml
-site_name: Project Documentation
-site_description: Documentation portal
-site_url: https://docs.example.com
-
-theme:
-  name: material
-  custom_dir: docs/overrides
-  logo: assets/images/spectrocloud-logo-white.svg
-  favicon: assets/images/favicon.png
-  font:
-    text: Plus Jakarta Sans
-    code: JetBrains Mono
-  palette:
-    - scheme: default
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    - scheme: slate
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
-  features:
-    - navigation.sections
-    - navigation.expand
-    - navigation.top
-    - search.suggest
-    - search.highlight
-    - content.code.copy
-    - content.tabs.link
-
-extra_css:
-  - overrides/stylesheets/brand.css
-
-markdown_extensions:
-  - admonition
-  - pymdownx.details
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - attr_list
-  - md_in_html
-  - tables
-  - toc:
-      permalink: true
-
-nav:
-  - Home: index.md
-  - Getting Started: getting-started.md
-  - Architecture:
-    - Overview: architecture/index.md
-    - Components: architecture/components.md
-  - Operations:
-    - Overview: operations/index.md
-    - Deployment: operations/deployment.md
-    - Monitoring: operations/monitoring.md
-  - Troubleshooting:
-    - Common Issues: troubleshooting/index.md
-    - Runbooks: troubleshooting/runbooks.md
-  - Reference:
-    - Overview: reference/index.md
-    - API: reference/api.md
-    - Configuration: reference/configuration.md
-```
+Do not retype `mkdocs.yml` or the brand stylesheet by hand. Run `scripts/scaffold_docs_site.sh <dest> --site-name "<name>"` — it writes `assets/mkdocs.yml.tmpl` and `assets/brand.css` into `<dest>` as `mkdocs.yml` and `docs/overrides/stylesheets/brand.css`, with `__SITE_NAME__` already substituted. Adjust `nav` and `repo_url` in the scaffolded `mkdocs.yml` per project.
 
 ### MkDocs Brand CSS (`docs/overrides/stylesheets/brand.css`)
 
-```css
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
-
-:root {
-  --md-primary-fg-color: #1F7A78;
-  --md-primary-fg-color--light: #9EB277;
-  --md-primary-fg-color--dark: #005B5B;
-  --md-accent-fg-color: #F0BE65;
-  --md-default-bg-color: #F7F1ED;
-  --md-default-fg-color: #012121;
-  --md-typeset-a-color: #1F7A78;
-  --md-code-bg-color: #E0DCD7;    /* brand neutral-1 */
-}
-
-/* Admonition colors */
-.md-typeset .admonition.note,
-.md-typeset details.note {
-  border-color: #1F7A78;
-}
-.md-typeset .note > .admonition-title,
-.md-typeset .note > summary {
-  background-color: rgba(31, 122, 120, 0.1);
-}
-
-.md-typeset .admonition.warning,
-.md-typeset details.warning {
-  border-color: #B94B01;
-}
-.md-typeset .warning > .admonition-title,
-.md-typeset .warning > summary {
-  background-color: rgba(185, 75, 1, 0.1);
-}
-
-.md-typeset .admonition.tip,
-.md-typeset details.tip {
-  border-color: #9EB277;
-}
-.md-typeset .tip > .admonition-title,
-.md-typeset .tip > summary {
-  background-color: rgba(158, 178, 119, 0.1);
-}
-
-/* Navigation and header */
-.md-header {
-  background-color: #043736;
-}
-
-.md-tabs {
-  background-color: #005B5B;
-}
-
-.md-footer {
-  background-color: #043736;
-  color: #F7F1ED;
-}
-
-/* Dark mode — brand Ink/neutrals only. NEVER blue/purple (old brand). */
-[data-md-color-scheme="slate"] {
-  --md-default-bg-color: #012121;  /* Ink */
-  --md-default-fg-color: #E0DCD7;  /* neutral-1 */
-  --md-code-bg-color: #1E3332;     /* dark neutral */
-}
-```
+Shipped as `assets/brand.css` — the scaffolder copies it in as-is. Ink/neutral dark mode only (`#012121`, `#E0DCD7`, `#1E3332`); never the retired blue/purple dark mode.
 
 ## Docusaurus Configuration
 
@@ -372,34 +235,7 @@ Use Markdown tables for structured data. Align columns for readability in source
 
 ### index.md (Landing Page)
 
-Always include co-branded logos at the top of the landing page showing the customer logo alongside the Spectro Cloud logo:
-
-```markdown
----
-title: Project Name
-description: Overview of the project documentation
----
-
-<div style="display: flex; align-items: center; justify-content: center; gap: 40px; margin: 20px 0 40px 0;">
-  <img src="assets/images/customer-logo.svg" alt="Customer Name" style="height: 60px;">
-  <span style="font-size: 2em; color: #BEB9B6;">+</span>
-  <img src="assets/images/spectrocloud-logo.png" alt="Spectro Cloud" style="height: 50px;">
-</div>
-
-# Project Name
-
-Brief project description (2-3 sentences).
-
-## Quick Links
-
-| Section | Description |
-|---------|-------------|
-| [Getting Started](getting-started.md) | Install and configure |
-| [Architecture](architecture/) | System design and components |
-| [Operations](operations/) | Deploy, monitor, maintain |
-| [Troubleshooting](troubleshooting/) | Debug common issues |
-| [Reference](reference/) | API and configuration reference |
-```
+Shipped as `assets/index.md.tmpl` — the scaffolder writes it to `docs/index.md` with `__SITE_NAME__` substituted. It always co-brands the customer logo alongside the Spectro Cloud logo at the top of the page; fill in the project description and adjust Quick Links per project.
 
 See `references/section-templates.md` for getting-started, troubleshooting, and runbook page templates.
 
