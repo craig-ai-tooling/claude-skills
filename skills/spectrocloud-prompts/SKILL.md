@@ -1,6 +1,6 @@
 ---
 name: spectrocloud-prompts
-description: Generate context-efficient prompts for delegating Spectro Cloud Palette tasks to agents or fresh sessions. Use when writing a prompt that must force the agent to READ the spectrocloud-* skills and record learnings locally instead of bloating context.
+description: "Write the agent prompt when Palette / Spectro Cloud work is being fanned out to subagents, background loops, or another machine -- so each agent is told to READ the exact spectrocloud-* skills by name instead of improvising, and writes findings to a local ./learnings.md rather than back into the skills repo. Use when Craig says: use agents for this, fan this out, send an agent to do X, use ultracode or Fable on it, use the spectrocloud skills that make sense, push a prompt I can point Claude at, write me a prompt for this, do this on the other box. Also use when the main session is running low on context and Palette work should be delegated. Includes a mandatory critic pass over the drafted prompt before it is handed back."
 ---
 
 # Spectro Cloud Prompt Generator

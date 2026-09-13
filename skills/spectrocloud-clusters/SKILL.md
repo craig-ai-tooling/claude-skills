@@ -1,6 +1,6 @@
 ---
 name: spectrocloud-clusters
-description: Create and manage Spectro Cloud Palette Edge clusters via API or Terraform - cluster create/delete, machine pools, kubeconfig, and profile updates. Use for the cluster lifecycle itself; for host setup and OS/image build steps use spectrocloud-agent-mode or spectrocloud-appliance-mode.
+description: "Create, inspect, tear down and re-create Palette clusters -- edge-native (agent mode, appliance mode, 2-node HA) plus imported and cloud clusters, via API or Terraform. Use when Craig says: create that cluster, deploy a 3 node palette cluster, spin up a cluster to demo, destroy and recreate the cluster, destroy all the Palette resources we created for this, delete the cluster and remove the import, import this EKS cluster, did you deploy the cluster yet, check on the cluster it seems like it is finishing up, add or replace a node. Ask for project, cluster name, profiles, and edge host UIDs before creating. Pair with spectrocloud-cluster-profiles for the profile layers and spectrocloud-troubleshooting when the cluster does not come up."
 ---
 
 # Spectro Cloud Edge Clusters

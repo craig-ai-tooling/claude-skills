@@ -1,6 +1,6 @@
 ---
 name: spectrocloud-packs
-description: Pack-specific learnings, gotchas, and configuration patterns for Spectro Cloud Palette. Covers storage, networking, security, and application packs.
+description: "Known-good pack values and the gotchas that bite, for Palette pack layers -- Piraeus/LINSTOR, Longhorn, MetalLB, Cilium, Calico, external-secrets, MongoDB, nginx, hello-universe -- plus how to page through the packs API for every version and pull the FULL default values. Use when Craig says: check the pack values, what should this pack's values look like, why is this pack failing (ChartInstallFailed, PackServiceNotReady, ManifestInstallFailed), get longhorn or piraeus RWX working, fix the pod/service CIDRs, set install-priority, what versions of this pack exist, turn these values into profile variables, is anything glaringly wrong with this profile's layers. Also use before adding or bumping a pack layer in a cluster profile, so the values go in complete rather than partial."
 ---
 
 # Spectro Cloud Pack Learnings

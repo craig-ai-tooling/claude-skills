@@ -1,6 +1,6 @@
 ---
 name: spectrocloud-cluster-profiles
-description: Create and manage Spectro Cloud Palette cluster profiles via API or Terraform. Covers pack discovery, CRUD operations, versioning, import/export, and cross-tenant cloning.
+description: "Create, version, clone and repair Palette cluster profiles via API or Terraform -- pack discovery, layer CRUD, profile variables, import/export, cross-tenant copying. Use when Craig says: use the profiles skill, create a new version of the profile, iterate the profile, update the profile so the change persists on rebuild, make those values profile variables, is anything glaringly wrong with this profile, mirror the profiles from one tenant to another (US to EU), export and import these profiles, build me an infra and an add-on profile, add this pack as a layer. Remember he usually wants a NEW profile version rather than an edit in place, and wants fixes pushed into the profile so a rebuilt cluster keeps them. Pair with spectrocloud-packs for the values that go in each layer."
 ---
 
 # Spectro Cloud Cluster Profiles

@@ -1,6 +1,6 @@
 ---
 name: doc-writer
-description: Generate long-form branded Spectro Cloud documents -- customer assessments, solution briefs, technical writeups, POC reports, and migration plans -- as Markdown with YAML frontmatter, brand-consistent formatting, and co-branding support. Owns long-form writeups only -- for a 1-2 page executive PDF use exec-doc-generator, for a multi-page docs site use docs-site-generator, and for a slide deck (rendered PDF or a Google Slides link) use slide-deck-generator. See this skill's Deliverable Routing table for all four.
+description: "Write the long-form Markdown document behind a customer engagement -- the detailed writeup that an exec PDF, slide deck, or Google Doc is later cut from. Use when Craig says: write this up, build out a one pager, I need a doc for this customer, turn this into an actionable google doc, make the doc look nice with spectro branding, we need a migration plan (VMware or existing K8s to Palette), start a new doc to piece together why spectro and where our gaps are, write the postmortem / RCA / POC report / assessment / solution brief / architecture writeup. Also use for the detailed .md that feeds exec-doc-generator, where the markdown carries all the detail and the PDF is the 1-2 pager. Owns long-form writeups only -- for a 1-2 page executive PDF use exec-doc-generator, for a multi-page docs site use docs-site-generator, and for a slide deck (rendered PDF or a Google Slides link) use slide-deck-generator. See this skill's Deliverable Routing table for all four."
 ---
 
 # Spectro Cloud Document Writer

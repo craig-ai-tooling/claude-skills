@@ -1,11 +1,6 @@
 ---
 name: ralph-ready-planning
-description: >-
-  Plan a coding project for the multi-model Fable→Sonnet/Ralph→Codex pipeline. As the planning
-  model (Fable), investigate the codebase/APIs FIRST, then write a "Definition of Ready" PRD +
-  atomic task list so complete that a fresh-context Sonnet instance — run autonomously by snarktank
-  Ralph — executes every task with zero judgment, and Codex reviews the diff cross-model. Use at the
-  start of a project. Supplements snarktank ai-dev-tasks (create-prd / generate-tasks) and ralph.
+description: "Plan a coding project so completely that a fresh-context Sonnet, run unattended by Ralph, executes every task without deciding, guessing or asking -- investigate the real repo and APIs FIRST, then write a Definition-of-Ready PRD plus atomic task list, with Codex reviewing the diff cross-model. Use at the very start of a project when Craig says: plan this properly before we build, make this ralph-ready, I want a plan Sonnet can run unattended, investigate first then plan, this needs a definition of ready, set up the Fable-plan / Sonnet-execute / Codex-review pipeline. Use the prd skill for an ordinary feature PRD and ralph to convert a finished plan into prd.json; this is the heavier investigate-first pass that sits on top of both."
 ---
 
 # Ralph-Ready Planning

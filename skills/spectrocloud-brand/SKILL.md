@@ -1,6 +1,6 @@
 ---
 name: spectrocloud-brand
-description: Spectro Cloud 2025 brand foundation. Colors, typography, logos, messaging, design principles, and tone. Referenced by doc-generation and web UI skills.
+description: "The authoritative Spectro Cloud 2025 brand foundation -- exact hex colors (Tranquil Teal, Paper, Ink), Plus Jakarta Sans typography, logo files and usage rules, product naming (Palette, VerteX, VMO), messaging, tagline and tone. Read this before choosing any color, font, logo or tagline for a customer-facing or internal deliverable -- deck, PDF, doc, web page, dashboard or demo app -- and whenever Craig says: make it spectro branded, use our branding, use our colors, what is our logo / tagline / positioning, co-brand this with the customer's colors. Never hand-roll Spectro colors, fonts or messaging without reading this first."
 ---
 
 # Spectro Cloud Brand Foundation (2025 Rebrand)
