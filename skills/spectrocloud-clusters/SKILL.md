@@ -143,6 +143,26 @@ curl -s -X PUT "https://api.spectrocloud.com/v1/spectroclusters/$CLUSTER_UID/pro
   -d '{"profiles": [{"uid": "<new-version-uid>"}]}'
 ```
 
+**IMPORTANT**: PUT replaces the cluster's entire attached-profile set. Any attached profile whose uid is left out of the body gets detached — including add-ons. On a cluster with more than one profile, read the complete current list from `spec.clusterProfileTemplates` (Get Cluster, below) and send all of it, or use PATCH instead (see "Attach an Additional Profile" below). Also remember: a new profile version resets that profile's variable overrides.
+
+### Attach an Additional Profile to a Running Cluster (Additive)
+To attach a profile (e.g. an add-on) without touching what's already attached, PATCH instead of PUT:
+```bash
+curl -s -X PATCH "https://api.spectrocloud.com/v1/spectroclusters/$CLUSTER_UID/profiles?resolveNotification=false" \
+  -H "ApiKey: $PALETTE_API_KEY" -H "ProjectUid: $PROJECT_UID" \
+  -H "Content-Type: application/json" \
+  -d '{"profiles": [{"uid": "<addon-profile-uid>"}]}'
+```
+
+Verify — re-GET the cluster and confirm `spec.clusterProfileTemplates` grew from N to N+1 with the original uids unchanged:
+```bash
+curl -s "https://api.spectrocloud.com/v1/spectroclusters/$CLUSTER_UID" \
+  -H "ApiKey: $PALETTE_API_KEY" -H "ProjectUid: $PROJECT_UID" | \
+  jq '.spec.clusterProfileTemplates[] | {name, uid, type}'
+```
+
+Source (re-verify against these if this ever needs re-checking): `spectrocloud/palette-sdk-go` `client/cluster.go` (`PatchClusterProfileValues`, `UpdateClusterProfileValues`) and `client/addon_deployment_update.go` (`CreateAddonDeployment`).
+
 ### Add Edge Host
 ```bash
 curl -s -X PATCH "https://api.spectrocloud.com/v1/spectroclusters/$CLUSTER_UID/machinePools/worker-pool" \
@@ -204,7 +224,8 @@ TOKEN=$(echo $RESPONSE | jq -r '.spec.token')
 | Delete | `DELETE /v1/spectroclusters/{uid}` |
 | Kubeconfig | `GET /v1/spectroclusters/{uid}/assets/kubeconfig` |
 | Edge Hosts | `GET /v1/edgehosts` |
-| Update Profile | `PUT /v1/spectroclusters/{uid}/profiles` |
+| Update Profile (replaces set) | `PUT /v1/spectroclusters/{uid}/profiles` |
+| Attach profile (additive) | `PATCH /v1/spectroclusters/{uid}/profiles` |
 
 ## Links
 
