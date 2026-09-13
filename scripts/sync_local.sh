@@ -50,6 +50,14 @@ mkdir -p "$TARGET_DIR"
 # Counter for tracking
 synced=0
 skipped=0
+templates=0
+
+# Check a SKILL.md's frontmatter for an exact `type: template` marker.
+# Template skills (e.g. skills/example-skill) are reference material, not
+# real invokable skills, and must never be symlinked into a live session.
+is_template() {
+    awk '/^---$/{c++; next} c==1' "$1" | grep -Eq '^type:[[:space:]]*template[[:space:]]*$'
+}
 
 echo "Syncing skills to: $TARGET_DIR"
 echo ""
@@ -70,6 +78,19 @@ for skill_dir in "$SKILLS_SRC"/*/; do
     fi
 
     target_link="$TARGET_DIR/$skill_name"
+
+    # Skip template skills (reference material, not real invokable skills).
+    # If a symlink from a previous sync already exists, remove it too.
+    if is_template "$skill_md"; then
+        if [[ -L "$target_link" ]]; then
+            rm "$target_link"
+            echo "  REMOVE: $skill_name (template, was linked)"
+        else
+            echo "  SKIP: $skill_name (template)"
+        fi
+        ((templates++)) || true
+        continue
+    fi
 
     # Remove existing symlink or directory
     if [[ -L "$target_link" ]]; then
@@ -94,7 +115,7 @@ for skill_dir in "$SKILLS_SRC"/*/; do
 done
 
 echo ""
-echo "Done! Synced $synced skill(s), skipped $skipped"
+echo "Done! Synced $synced skill(s), skipped $skipped, templates $templates"
 
 if [[ "$PROJECT_MODE" == true ]]; then
     echo ""
