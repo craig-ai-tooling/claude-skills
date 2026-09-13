@@ -1,6 +1,7 @@
 ---
 name: example-skill
 description: Template skill demonstrating proper structure. Use this as a reference when creating new skills. Copy this folder and modify for your use case.
+type: template
 ---
 
 # Example Skill
