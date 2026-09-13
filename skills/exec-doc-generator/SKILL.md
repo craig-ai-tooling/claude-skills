@@ -1,6 +1,6 @@
 ---
 name: exec-doc-generator
-description: Generate a polished 1-2 page executive PDF (HTML rendered via Puppeteer), merging customer brand colors with Spectro Cloud branding -- pinned footers, stat cards, timelines, and professional layouts. Owns the short executive PDF only -- for a long-form writeup use doc-writer, for a multi-page docs site use docs-site-generator, and for a slide deck (rendered PDF or a Google Slides link) use slide-deck-generator. See the Deliverable Routing table in doc-writer.
+description: "Generate a polished 1-2 page executive PDF (HTML rendered via Puppeteer) merging customer brand colors with Spectro Cloud branding -- pinned footers, stat cards, timelines. Also answers to exec-doc and exec-docs. Use when Craig says: I need a one pager for this customer, make it a 1-2 pager PDF for executive reading, not deep technical, an exec summary of this, a brief one pager that hammers home the selling points, do not be verbose, a nice looking PDF for their leadership, a POC overview or solution summary for the exec audience. Typically follows doc-writer or a postmortem: the markdown holds all the detail, this is the two pages an executive actually reads. Owns the short executive PDF only -- for a long-form writeup use doc-writer, for a multi-page docs site use docs-site-generator, and for a slide deck (rendered PDF or a Google Slides link) use slide-deck-generator. See the Deliverable Routing table in doc-writer."
 ---
 
 # Executive Document Generator

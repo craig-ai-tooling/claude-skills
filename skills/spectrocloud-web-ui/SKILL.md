@@ -1,6 +1,6 @@
 ---
 name: spectrocloud-web-ui
-description: Spectro Cloud brand theming for web frontends. CSS custom properties, component patterns, dark mode, responsive layouts, and accessibility guidance. Use when building dashboards, demo apps, portals, or any HTML/CSS project needing SC visual identity. References spectrocloud-brand for colors and typography.
+description: "Spectro Cloud brand theming for anything rendered in a browser -- CSS custom properties for the 2025 palette, Plus Jakarta Sans, buttons/cards/tables/nav, dark mode, responsive breakpoints, accessibility. Use when Craig asks for a web page, dashboard, portal, demo app, HTML artifact, or status/monitoring view that should look like Spectro Cloud: make it look nice and legible, make it spectro branded, use our branding, keep it simple and clear, a terminal-style window showing errors, a customer-facing landing or portal page, a hello-universe style demo. Also use before hand-rolling any colors or fonts in an HTML deliverable for a customer, and pair it with spectrocloud-brand for logo rules and messaging. Not for slide decks or PDFs."
 ---
 
 # Spectro Cloud Web UI Theming

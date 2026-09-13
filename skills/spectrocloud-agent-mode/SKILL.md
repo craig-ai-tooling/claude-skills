@@ -1,6 +1,6 @@
 ---
 name: spectrocloud-agent-mode
-description: Deploy and manage Spectro Cloud Palette Edge clusters using Agent Mode. Covers installation, registration tokens, node validation, cluster profiles with BYOOS pack, and uninstallation procedures.
+description: "Install and manage the Palette agent on a host that already has its own OS -- bring-your-own-OS edge devices, bare metal, VMs or cloud instances -- covering registration tokens, user-data, node validation, BYOOS-pack cluster profiles and uninstall. Use when Craig says: install the agent on this box, use agent mode, bring your own OS, register this existing host with Palette, add this VM as an edge host without building an ISO, create a registration token, why will the agent not register, uninstall the palette agent. Use spectrocloud-appliance-mode instead when the node is being shipped a Palette Edge ISO; note agent mode supports 1 or 3+ nodes and never 2."
 ---
 
 # Spectro Cloud Agent Mode Deployment

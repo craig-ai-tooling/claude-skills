@@ -1,6 +1,6 @@
 ---
 name: spectrocloud-common
-description: Common Spectro Cloud Palette utilities for API operations. Project lookup, pack discovery, registry types, and troubleshooting. Used by other Palette skills.
+description: "READ THIS FIRST for any Spectro Cloud Palette API work -- getting the Palette API key out of 1Password, resolving the ProjectUid (always ask which project), pack and registry lookups, and the end-to-end order of operations for demo or meeting prep. Use whenever a task touches api.spectrocloud.com, a Palette tenant (prod, custeng-prod, a customer tenant, an EU tenant), or Craig says: use the spectrocloud skills that make sense, check palette, look at prod, I just added an API token for this tenant, get the key from op. Other spectrocloud-* skills assume this one has already been read; read it before them rather than guessing at auth, project scoping, or pagination."
 ---
 
 # Spectro Cloud Common Utilities

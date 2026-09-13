@@ -1,6 +1,6 @@
 ---
 name: spectrocloud-troubleshooting
-description: Debug Spectro Cloud Palette clusters using event streams, log bundles, and edge host logs. Tracks known errors - both actionable and noise.
+description: "Figure out why a Palette cluster, edge host, or pack is not healthy -- cluster event stream and conditions via the API, log bundles, stylus and palette-agent logs over SSH, plus a list of which errors are real versus normal deploy noise. Use when Craig says: why is this cluster stuck, it is in Provisioning and not provisioning, take a look and see if you can figure out why, why are nodes going NotReady, why is it cordoned, everything is still failing yes, this pack will not install, the registry is syncing forever, gather the logs / grab a support bundle / pull a log bundle, deep dive on what is going on, do not fix it just diagnose it, watch the deploy and tell me what breaks. Also use while watching any deploy, since it says which errors to ignore and when impatience is the real problem."
 ---
 
 # Spectro Cloud Troubleshooting

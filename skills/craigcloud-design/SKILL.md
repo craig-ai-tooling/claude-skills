@@ -1,6 +1,6 @@
 ---
 name: craigcloud-design
-description: The craigcloud visual language for Craig's own tools and sites — measured dark palette, JetBrains Mono + Chakra Petch, self-explaining sections, and the accessibility rules that keep it usable. Read this BEFORE choosing any color, font, spacing or layout for anything on craigcloud.io or in his personal tooling — status pages, dashboards, consoles, upload sites, internal web UIs — and whenever Craig says: make this look good, make it match, use my theme, craigcloud style, make it look like a product, this page is ugly. Use spectrocloud-brand instead for anything customer-facing or Spectro-branded; this is for HIS surfaces, not the company's.
+description: "The craigcloud visual language for Craig's own tools and sites -- measured dark palette, JetBrains Mono + Chakra Petch, self-explaining sections, and the accessibility rules that keep it usable. Read this BEFORE choosing any color, font, spacing or layout for anything on craigcloud.io or in his personal tooling -- status pages, dashboards, consoles, upload sites, internal web UIs -- and whenever Craig says: make this look good, make it match, use my theme, craigcloud style, make it look like a product, this page is ugly. Use spectrocloud-brand instead for anything customer-facing or Spectro-branded; this is for HIS surfaces, not the company's."
 ---
 
 # craigcloud design

@@ -187,7 +187,7 @@ curl -X DELETE "https://api.anthropic.com/v1/skills/skill_01abc123" \
 ```
 claude-skills/
 ├── skills/                     # All skills live here
-│   └── example-skill/          # Template skill to reference
+│   └── doc-writer/             # one directory per skill
 │       └── SKILL.md
 ├── scripts/                    # Tooling scripts
 │   ├── init_skill.py           # Initialize new skill

@@ -1,6 +1,6 @@
 ---
 name: spectrocloud-appliance-mode
-description: Build and deploy Spectro Cloud Palette Edge clusters using Appliance Mode. Covers CanvOS builds, provider images, ISOs, content bundles, 2-node deployments, and CI/CD integration patterns.
+description: "Build the Palette Edge ISO and everything that goes into it -- CanvOS checkout and .arg file, earthly builds, provider images, user-data and site-user-data, content bundles, air-gap installs, 2-node HA. Use when Craig says: build an ISO, rebuild the ISO with X, which CanvOS tag or K8s version should we use, does appliance mode accept Site User Data, set the hostname and static IP in user-data, build the content bundle, do the airgap / offline / disconnected build, boot it on Proxmox and install, what will the provider image tag be, stylus or Kairos on the node, two-node with a witness, secure boot. Also for a node stuck in an install loop or a /oem user-data that did not take. Use spectrocloud-agent-mode instead when Palette manages an existing OS rather than shipping an ISO."
 ---
 
 # Spectro Cloud Appliance Mode
