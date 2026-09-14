@@ -96,18 +96,30 @@ sync-private:
 
 # Secret scan covers skills/ only: private-skills/ legitimately contains lab
 # identifiers (that's what makes it private).
+#
+# The `else` branch is one shell invocation (line continuations), not one make
+# recipe line per command: `for ... done` returns the exit status of only its
+# LAST iteration, so a middle skill failing while the last one passes used to
+# make the whole `for` line -- and therefore `make validate` -- exit 0 with the
+# failure printed and ignored (lm-ralph-image-lacks-pyyaml: pyyaml missing from
+# the Ralph runner image meant every skill failed quick_validate.py, and
+# `make validate` still exited 0). `fail` accumulates across every skill AND
+# secret_scan.py AND check_doc_skills.py, so all of them still run and get
+# reported, and the target exits non-zero if any of them failed.
 validate:
 ifdef SKILL
 	$(require_skill_path)
 	@python3 $(SCRIPTS_DIR)/quick_validate.py $(SKILL_PATH)
 else
-	@for skill_dir in $(SKILLS_DIR)/*/ $(PRIVATE_DIR)/*/; do \
+	@fail=0; \
+	for skill_dir in $(SKILLS_DIR)/*/ $(PRIVATE_DIR)/*/; do \
 		if [ -f "$$skill_dir/SKILL.md" ]; then \
-			python3 $(SCRIPTS_DIR)/quick_validate.py "$$skill_dir"; \
-		fi \
-	done
-	@python3 $(SCRIPTS_DIR)/secret_scan.py $(SKILLS_DIR)
-	python3 $(SCRIPTS_DIR)/check_doc_skills.py
+			python3 $(SCRIPTS_DIR)/quick_validate.py "$$skill_dir" || fail=1; \
+		fi; \
+	done; \
+	python3 $(SCRIPTS_DIR)/secret_scan.py $(SKILLS_DIR) || fail=1; \
+	python3 $(SCRIPTS_DIR)/check_doc_skills.py || fail=1; \
+	exit $$fail
 endif
 
 list:
