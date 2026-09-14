@@ -44,7 +44,10 @@ Sonnet, unattended. That is what makes limited Fable time viable.
 and constraints before writing anything. You are gathering the exact file paths, signatures,
 conventions, versions, and edge cases you will spoon-feed. Planning from imagination is the #1
 cause of Ralph guessing wrong. Record concrete anchors you'll cite in tasks (e.g. "mirror
-`internal/foo.go:80`").
+`internal/foo.go:80`"). If the plan builds a tool, CLI or integration, first check it does not
+already exist — the https://axi.md catalog, `npm search`, PyPI, GitHub, and
+`~/code/ai-lawnmower/REGISTRY.md`. The PRD records what was checked and the use case the
+existing options lack; if nothing is lacking, adopt it instead of planning a build.
 
 **Phase 1 — PRD.** Fill in `references/prd-template.md`. Keep it tight: scope, the decisions
 you've *already made* (with the rejected alternative + why), non-goals, risks, and top-level
