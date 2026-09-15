@@ -5,15 +5,18 @@ description: "READ THIS FIRST for any Spectro Cloud Palette API work -- getting 
 
 # Spectro Cloud Common Utilities
 
-Shared utilities for all Palette API operations. Reference this skill for project/pack lookups.
+Shared utilities for all Palette API operations. **Try the matching `palette-axi`
+verb before raw curl** — it routes around dead/degraded endpoints and paginates
+`/v1/packs` for you (see Quick Reference). Curl is still required for writes, pack
+full-values, and registries/cloudconfigs (no verb yet).
 
 ## End-to-End Workflow
 
 **For meeting prep / demo setup, follow this order:**
 
 1. **Get credentials** → Retrieve `palette-api-key` from your secret store, set `PALETTE_API_KEY`
-2. **Get project** → **ALWAYS ASK** user for project name, then look up `PROJECT_UID`. Never assume or infer.
-3. **Discover existing resources** → List profiles, clusters, edge hosts
+2. **Get project** → **ALWAYS ASK** user for project name, then look up `PROJECT_UID` (`palette-axi projects`). Never assume or infer.
+3. **Discover existing resources** → `palette-axi profiles`, `palette-axi clusters --edge`, `palette-axi edgehosts` (all take `--project`)
 4. **Decide what to create/update** → Present findings to user
 5. **Create/update profiles** → Use `spectrocloud-cluster-profiles` skill
 6. **Create cluster** → Use `spectrocloud-clusters` skill (if edge hosts available)
@@ -25,7 +28,8 @@ Shared utilities for all Palette API operations. Reference this skill for projec
 
 ## Authentication
 
-All API calls require `PALETTE_API_KEY` and `PROJECT_UID` environment variables.
+All API calls require `PALETTE_API_KEY`. Writes and anything palette-axi doesn't cover
+(pack full-values, registries) also need `PROJECT_UID` as a `ProjectUid:` header.
 
 ### Get Credentials
 
@@ -33,12 +37,11 @@ All API calls require `PALETTE_API_KEY` and `PROJECT_UID` environment variables.
 export PALETTE_API_KEY="<your-api-key>"
 ```
 
-**Before any Palette API operations**, verify credentials are set:
+**Before any Palette API operations**, verify credentials and connectivity:
 ```bash
-# Test API connectivity
-curl -s "https://api.spectrocloud.com/v1/projects" \
-  -H "ApiKey: $PALETTE_API_KEY" | jq 'if .items then "OK: Found \(.items | length) projects" else "ERROR: \(.)" end'
+palette-axi doctor
 ```
+Checks 1Password and the Palette API in one call (`--json` for machine-readable output).
 
 ---
 
@@ -46,52 +49,39 @@ curl -s "https://api.spectrocloud.com/v1/projects" \
 
 **ALWAYS ASK the user which project to use.** Never assume or infer from context.
 
-API calls require a Project UID. Ask for the project **name**, then look it up:
-
 ```bash
-# List all projects
-curl -s "https://api.spectrocloud.com/v1/projects" \
-  -H "ApiKey: $PALETTE_API_KEY" | \
-  jq '[.items[] | {name: .metadata.name, uid: .metadata.uid}]'
+palette-axi projects
 ```
+Lists every project's `name`, `uid`, and `clusters` count — use the `uid` as
+`PROJECT_UID` for writes and for the fallback curl recipes below. This replaces the
+old `GET /v1/projects` recipe: that endpoint now 405s on GET for some tenants and
+caps at 50 rows for others; `palette-axi projects` calls the working
+`/v1/dashboard/projects` endpoint instead.
 
-**If name isn't an exact match**, search case-insensitively:
-```bash
-PROJECT_NAME="demo"
-curl -s "https://api.spectrocloud.com/v1/projects" \
-  -H "ApiKey: $PALETTE_API_KEY" | \
-  jq --arg name "$PROJECT_NAME" '[.items[] |
-    select(.metadata.name | ascii_downcase | contains($name | ascii_downcase)) |
-    {name: .metadata.name, uid: .metadata.uid}]'
-```
-
-**If multiple matches**, present options to user and confirm before proceeding.
+**If the name isn't an exact match**, filter the output yourself
+(`palette-axi projects | grep -i <name>`) and confirm with the user before proceeding.
 
 ---
 
 ## Pack Discovery
 
-**Ask user for the pack name.** If unknown, suggest browsing Palette UI or searching.
+**Ask user for the pack name.** If unknown, search by keyword below.
 
-**CRITICAL**: Always query for the LATEST version of every pack before use. Never assume or use remembered versions - they change frequently. See "Get Latest Pack Version" section below.
+**CRITICAL**: Always query for the LATEST version of every pack before use. Never assume or use remembered versions - they change frequently.
 
 ### Find Pack by Exact Name (All Versions, Newest First)
 
-**Important**: Pack API paginates at 50 results. Newer versions may require offset parameter.
-
 ```bash
-# Get ALL versions of a pack (handles pagination)
-PACK_NAME="edge-k3s"
-(for OFFSET in 0 50 100 150; do
-  curl -s "https://api.spectrocloud.com/v1/packs?filters=metadata.name=$PACK_NAME&limit=50&offset=$OFFSET" \
-    -H "ApiKey: $PALETTE_API_KEY" | \
-    jq '[.items[] | select(.status.disabled != true) |
-      {name: .metadata.name, version: .spec.version, uid: .metadata.uid,
-       registryUid: .spec.registryUid, layer: .spec.layer}]'
-done) | jq -s 'add | sort_by(.version | split(".") | map(tonumber? // 0)) | reverse'
+palette-axi packs <name>          # e.g. palette-axi packs edge-k3s
+palette-axi packs <name> --full   # every version, not just the newest 12
 ```
+Handles the `/v1/packs` 50-row pagination for you, drops disabled versions, sorts
+newest-first, and flags the top row `latest:true` — no manual offset loop or jq
+version-sort needed.
 
-### Get Pack Default Values (Critical!)
+### Get Pack Default Values (no palette-axi verb yet)
+
+Once you have the pack `uid` from `palette-axi packs <name>`, fetch its full values:
 ```bash
 # Fetch the COMPLETE default values for a pack
 curl -s "https://api.spectrocloud.com/v1/packs/$PACK_UID?includePackValues=true" \
@@ -105,7 +95,10 @@ curl -s "https://api.spectrocloud.com/v1/packs/$PACK_UID?includePackValues=true"
 3. **Only modify specific sections** you need to change
 4. Never strip out sections - missing values cause validation failures
 
-### Search Packs by Keyword
+### Search Packs by Keyword (exact name unknown)
+
+`palette-axi packs` needs an exact `metadata.name`; for a keyword scan across a
+whole layer, curl is still the way:
 ```bash
 KEYWORD="hello"
 curl -s "https://api.spectrocloud.com/v1/packs?filters=spec.layer=addon&limit=100" \
@@ -127,6 +120,10 @@ curl -s "https://api.spectrocloud.com/v1/packs?filters=spec.layer=addon&limit=10
 
 **Important**: If a pack isn't found with a specific registry, omit `registry_uid` to let Terraform auto-discover.
 
+`palette-axi` has no `registries` verb yet — a read-only one is filed
+(`lm-palette-axi-registries`) but not built, and no version is promised. Curl is the
+only way to list registries today:
+
 ### List Available Registries
 ```bash
 # Pack registries
@@ -144,62 +141,26 @@ curl -s "https://api.spectrocloud.com/v1/registries/helm?limit=50" \
 
 ## Discovery: What Exists?
 
-Before creating resources, check what already exists:
+Before creating resources, check what already exists — all three take `--project`:
 
-### List Cluster Profiles
 ```bash
-curl -s "https://api.spectrocloud.com/v1/clusterprofiles" \
-  -H "ApiKey: $PALETTE_API_KEY" \
-  -H "ProjectUid: $PROJECT_UID" | \
-  jq '[.items[] | {name: .metadata.name, uid: .metadata.uid, version: .spec.version, type: .spec.published.type}]'
-```
-
-### List Edge Clusters
-```bash
-curl -s "https://api.spectrocloud.com/v1/spectroclusters?filters=spec.cloudType=edge-native" \
-  -H "ApiKey: $PALETTE_API_KEY" \
-  -H "ProjectUid: $PROJECT_UID" | \
-  jq '[.items[] | {name: .metadata.name, uid: .metadata.uid, state: .status.state}]'
-```
-
-### List Edge Hosts (with status)
-```bash
-curl -s "https://api.spectrocloud.com/v1/edgehosts" \
-  -H "ApiKey: $PALETTE_API_KEY" \
-  -H "ProjectUid: $PROJECT_UID" | \
-  jq '[.items[] | {name: .metadata.name, uid: .metadata.uid, state: .status.state,
-      health: .status.health.state, clusterUid: .status.clusterUid}]'
+palette-axi profiles          # cluster profiles: name, uid, version, type, cloudType
+palette-axi clusters --edge   # edge-native clusters: name, uid, state, health
+palette-axi edgehosts         # edge hosts: name, uid, state, health, attached cluster
 ```
 
 ### Get Latest Pack Version (MANDATORY)
 
-**ALWAYS run this query for EVERY pack** you intend to use. Never skip this step or use cached/remembered versions.
-
-**CRITICAL**: API paginates at 50 results. Popular packs (Calico, K8s, etc.) have many versions - you MUST use pagination to find the true latest:
-
-```bash
-# Get LATEST version of a pack (handles pagination properly)
-PACK_NAME="cni-calico"  # Replace with actual pack name
-LATEST=$((for OFFSET in 0 50 100 150; do
-  curl -s "https://api.spectrocloud.com/v1/packs?filters=metadata.name=$PACK_NAME&limit=50&offset=$OFFSET" \
-    -H "ApiKey: $PALETTE_API_KEY" | jq '.items[]'
-done) | jq -s '[.[] | select(.status.disabled != true)] |
-  sort_by(.spec.version | split(".") | map(tonumber? // 0)) |
-  reverse | .[0] | {name: .metadata.name, version: .spec.version, uid: .metadata.uid}')
-echo "$LATEST"
-```
-
-**Example**: Calico 3.30.1 vs 3.31.2 - without pagination you may get an older version that appears "latest" in the first 50 results.
+**ALWAYS check the latest version for EVERY pack** you intend to use. Never skip this step or use cached/remembered versions — `palette-axi packs cni-calico --full` (see Pack Discovery above).
 
 ### Get Latest BYOOS Version (edge-native-byoi)
 
 BYOOS exists in TWO registries; filter on Public Repo (`5eecc89d0b150045ae661cef`, `type = "spectro"`, recommended). Never hardcode the version:
 
 ```bash
-curl -s "https://api.spectrocloud.com/v1/packs?filters=metadata.name=edge-native-byoi&limit=50" \
-  -H "ApiKey: $PALETTE_API_KEY" | jq -r '[.items[] | select(.spec.registryUid == "5eecc89d0b150045ae661cef")] |
-  sort_by(.spec.version | split(".") | map(tonumber)) | reverse | .[0] | {version: .spec.version, uid: .metadata.uid}'
+palette-axi packs edge-native-byoi --full
 ```
+Pick the newest row whose `registryUid` is `5eecc89d0b150045ae661cef`.
 
 ---
 
@@ -209,20 +170,11 @@ curl -s "https://api.spectrocloud.com/v1/packs?filters=metadata.name=edge-native
 
 ### Get n-1 Minor K8s Version (Palette API)
 
-For cluster profiles, query Palette API for edge K8s pack versions:
-
 ```bash
-# Get n-1 minor version for edge-k3s (recommended default)
-PACK_NAME="edge-k3s"
-K8S_VERSION=$((for OFFSET in 0 50 100 150; do
-  curl -s "https://api.spectrocloud.com/v1/packs?filters=metadata.name=$PACK_NAME&limit=50&offset=$OFFSET" \
-    -H "ApiKey: $PALETTE_API_KEY" | jq '.items[]'
-done) | jq -s '[.[] | select(.status.disabled != true) | .spec.version] | unique |
-  sort_by(split(".") | map(tonumber)) | reverse |
-  group_by(split(".")[0:2] | join(".")) |
-  sort_by(.[0] | split(".") | map(tonumber)) | reverse | .[1][0] // .[0][0]')
-echo "Recommended K8s version: $K8S_VERSION"
+palette-axi packs edge-k3s --full   # recommended default; or edge-k8s for kubeadm
 ```
+Versions come back deduped, disabled-filtered, and sorted newest-first — the n-1
+minor is the newest row whose `major.minor` differs from the top row's.
 
 **Query for other distributions:**
 - `edge-k3s` - K3s (required for 2-node clusters)
@@ -423,21 +375,33 @@ data "spectrocloud_registry" "bitnami" {
 | "Parameter X value is required" | Fetch and include pack default values |
 | Pack in wrong registry | Some packs exist in multiple registries |
 | Project not found | Use project name lookup, not hardcoded UID |
-| Can't find latest K8s version | API paginates at 50 - use offset parameter (0, 50, 100, 150) |
-| API returns empty for recent versions | Pagination issue - newer versions beyond first 50 results |
+| Can't find latest K8s/pack version by hand | Use `palette-axi packs <name> --full` — it paginates for you |
+| Raw `/v1/packs` returns empty for recent versions | Pagination issue beyond first 50 rows; not a problem for `palette-axi packs` |
 
 ---
 
 ## Quick Reference
 
+**`palette-axi` verbs — try these first:**
+
+| Verb | Replaces |
+|------|----------|
+| `palette-axi doctor` | credential + API connectivity check |
+| `palette-axi projects` | `GET /v1/projects` (retired: 405s on GET / caps at 50 rows for some accounts) |
+| `palette-axi packs <name> [--full]` | paginated `GET /v1/packs?filters=metadata.name=...` |
+| `palette-axi profiles` / `profile <ref>` | `GET /v1/clusterprofiles[/{uid}]` |
+| `palette-axi clusters --edge` / `cluster <ref>` | `GET /v1/spectroclusters[/{uid}]` |
+| `palette-axi edgehosts` | `GET /v1/edgehosts` (also 405s on some accounts) |
+| `palette-axi events <ref>` | `GET /v1/spectroclusters/{uid}/events` (404s ~75% of the time — see `spectrocloud-troubleshooting`) |
+
+**Raw curl — fallback only, no verb yet:**
+
 | Item | Endpoint |
 |------|----------|
-| List Projects | `GET /v1/projects` |
-| Find Pack | `GET /v1/packs?filters=metadata.name=<name>` |
 | Get Pack Values | `GET /v1/packs/{uid}?includePackValues=true` |
 | List Pack Registries | `GET /v1/registries/pack` |
 | List Helm Registries | `GET /v1/registries/helm` |
-| Required Headers | `ApiKey`, `ProjectUid` (for pack calls) |
+| Required Headers | `ApiKey`, `ProjectUid` (for pack/registry calls) |
 
 ## Links
 
