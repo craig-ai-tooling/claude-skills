@@ -42,10 +42,20 @@ nobody can read at 6am on a phone, so:
    word: `●` ok, `▲` warn, `✕` bad, `◆` running, `○` pending. The naive neon
    triad collapses to ΔE 9.1 under protanopia — ok and warn become the same
    colour. The palette's triad holds ΔE 23.9 worst case.
-2. **Every section explains itself.** A `.cc-explain` line under each heading,
-   in plain English, saying what it is and why it matters. Someone who was not
-   in the design conversation must still be able to read the page. This is the
-   most commonly skipped rule and the one Craig has asked for by name.
+2. **Every section explains itself — behind an (i), not above the data.** Each
+   heading carries a small circled `i` next to its title, and the `.cc-explain`
+   line sits inside the heading, revealed on hover or on focus (which is what a
+   click, and a tap on a phone, land as). Plain English, saying what it is and
+   why it matters. Someone who was not in the design conversation must still be
+   able to read the page — and someone who reads it daily must not pay a
+   paragraph for it every time. Craig, 9/15/26: *"No need for it to take up
+   space always. I never read it."*
+   Reference implementation: `h2()` in `ai-lawnmower/loop/status-page.py`, with
+   the disclosure proven in a real browser by `loop/status_explain_check.mjs`.
+   `craigcloud.css` deliberately does **not** ship the hide/reveal rules: other
+   surfaces carry `.cc-explain` as a plain sibling paragraph with no toggle, and
+   hiding it there would take their copy away with no way to get it back. Each
+   surface opts in locally until Craig says otherwise.
 3. **Body text ≥ 4.5:1 and ≥ 12px.** `--cc-dim` (4.7:1) is the floor and is for
    ornaments only.
 4. **Touch targets ≥ 44px** with real spacing. A bevelled corner must not eat

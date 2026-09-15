@@ -1,20 +1,41 @@
-# cos-prior-art — planning checks what already exists before it plans a build
+# craigcloud-design: the section explanation goes behind an (i)
 
-Craig, 9/14/26: "I'd like to make sure that I don't recreate the wheel if things
-already exist... If the tooling isn't built well or doesn't include all the use
-cases we need, then let's go ahead and make sure we build it."
+Craig, 9/15/26: *"All the panels on the lawnmower dashboard have descriptions. I would
+rather see the desc go into a little circle i next to the panel title that if you mouse
+over or click shows the desc text. No need for it to take up space always. I never read
+it."*
 
-`ralph-ready-planning` Phase 0 investigates the repo in front of it and never
-looks outside. `gws-axi` sat installed and unused from 9/8 to 9/14/26 while 33
-sessions failed on raw `gws`; the https://axi.md catalog lists 74 tools.
+That shipped in `ai-lawnmower` (`loop/status-page.py`, PR against `craig-ai-tooling/ai-lawnmower`).
+This repo carries the *written rule* that produced the old layout — rule 2 of
+`craigcloud-design`, "Every section explains itself. A `.cc-explain` line under each
+heading" — and it is described there as "the most commonly skipped rule and the one Craig
+has asked for by name". Left as-is, the next agent to build a craigcloud surface
+faithfully reproduces the thing he just asked to have taken away.
+
+So the rule now describes the disclosure: the explanation still exists, still in plain
+English, but it lives inside the heading behind a circled `i` and is revealed on hover or
+focus.
+
+## Deliberately NOT changed
+
+`craigcloud.css` keeps `.cc-explain` exactly as it is. The other surfaces that use this
+design system — `upload-factory`, `mariners-lineup`, the lawnmower console — render
+`.cc-explain` as a plain sibling paragraph with no toggle anywhere in their markup. Adding
+`display:none` to the shared class would delete their explanatory copy outright and leave
+no affordance to bring it back. The hide/reveal rules stay local to the surface that has
+the toggle (`status-page.py`'s own appended CSS, which is applied after the shared sheet
+and therefore wins). Whether every craigcloud surface adopts the pattern is Craig's call,
+not a side effect of this edit.
 
 ## Files touched
 
 ```allowlist
-skills/ralph-ready-planning/SKILL.md
+skills/craigcloud-design/SKILL.md
 ralph/IMPLEMENTATION_PLAN.md
 ```
 
-## Tasks
+## Verify
 
-- [x] Phase 0 of `skills/ralph-ready-planning/SKILL.md`: when the plan builds a tool, CLI or integration, check the axi.md catalog, `npm search`, PyPI, GitHub and `~/code/ai-lawnmower/REGISTRY.md` first; the PRD records what was checked and the missing use case, or the plan adopts instead. Verify: `grep -q 'axi.md' skills/ralph-ready-planning/SKILL.md` exits 0 and `make validate` exits 0.
+- `make validate` exits 0.
+- `grep -q 'circled `i`' skills/craigcloud-design/SKILL.md` exits 0.
+- `git diff` touches no `.css` file: the shared stylesheet is unchanged.
