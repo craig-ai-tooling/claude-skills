@@ -1,0 +1,24 @@
+{
+  "node": {
+    "name": "Dell R660 (2x32-core, 1.5 TB)",
+    "ram_gib": 1536,
+    "cores": 64,
+    "threads": 128,
+    "model_match": "R660"
+  },
+  "limits": {
+    "max_nodes": 32
+  },
+  "islands": [
+    {"name": "Oracle EE", "match": "ORACLE.*(^|[-_ ])EE([-_ 0-9]|$)", "kind": "license"},
+    {"name": "Oracle SE", "match": "ORACLE", "kind": "license"},
+    {"name": "SQL Server", "match": "MSSQL|(^|[-_ ])SQL([-_ 0-9]|$)", "kind": "license"},
+    {"name": "DMZ", "match": "DMZ", "kind": "isolation"},
+    {"name": "Firewall A", "match": "(^|[-_ ])FW-?A([-_ 0-9]|$)", "kind": "isolation"},
+    {"name": "Firewall B", "match": "(^|[-_ ])FW-?B([-_ 0-9]|$)", "kind": "isolation"}
+  ],
+  "pricing": {
+    "unit_prices": [30000, 45000, 60000],
+    "currency": "$"
+  }
+}
