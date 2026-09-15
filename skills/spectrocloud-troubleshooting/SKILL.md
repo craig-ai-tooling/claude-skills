@@ -22,13 +22,12 @@ Events stream live and show orchestration progress. Watch these during provision
 
 ### Get Cluster Events
 ```bash
-# Get recent events for a cluster
-curl -s "https://api.spectrocloud.com/v1/spectroclusters/$CLUSTER_UID/events?limit=50" \
-  -H "ApiKey: $PALETTE_API_KEY" \
-  -H "ProjectUid: $PROJECT_UID" | \
-  jq '[.items[] | {time: .metadata.creationTimestamp, type: .involvedObject.kind,
-      reason: .reason, message: .message}]'
+palette-axi events $CLUSTER_UID --project $PROJECT_UID --limit 50
 ```
+Replaces the old `GET /v1/spectroclusters/{uid}/events` recipe: that endpoint (and
+`/status/events`) 404s in practice — confirmed at a 75% failure rate — because the
+working collection is `/v1/events/components/spectrocluster/{uid}`, which
+`palette-axi events` calls instead. Add `--full` for untruncated messages.
 
 ### Get Cluster Status & Conditions
 ```bash
@@ -44,10 +43,7 @@ curl -s "https://api.spectrocloud.com/v1/dashboard/spectroclusters/$CLUSTER_UID/
 # Poll events every 10 seconds during provisioning
 while true; do
   echo "=== $(date) ==="
-  curl -s "https://api.spectrocloud.com/v1/spectroclusters/$CLUSTER_UID/events?limit=10" \
-    -H "ApiKey: $PALETTE_API_KEY" \
-    -H "ProjectUid: $PROJECT_UID" | \
-    jq -r '.items[] | "\(.metadata.creationTimestamp) [\(.reason)] \(.message)"' | head -10
+  palette-axi events $CLUSTER_UID --project $PROJECT_UID --limit 10
   sleep 10
 done
 ```
@@ -169,10 +165,7 @@ curl -s "https://api.spectrocloud.com/v1/dashboard/spectroclusters/$CLUSTER_UID/
 
 ### 3. Recent Events
 ```bash
-curl -s "https://api.spectrocloud.com/v1/spectroclusters/$CLUSTER_UID/events?limit=20" \
-  -H "ApiKey: $PALETTE_API_KEY" \
-  -H "ProjectUid: $PROJECT_UID" | \
-  jq -r '.items[] | "\(.metadata.creationTimestamp) [\(.reason)] \(.message)"'
+palette-axi events $CLUSTER_UID --project $PROJECT_UID --limit 20
 ```
 
 ### 4. SSH to Edge Host (if applicable)
@@ -230,7 +223,7 @@ curl -s "https://api.spectrocloud.com/v1/spectroclusters/$CLUSTER_UID/packs/stat
 
 | Operation | Endpoint |
 |-----------|----------|
-| Cluster events | `GET /v1/spectroclusters/{uid}/events` |
+| Cluster events | `palette-axi events <ref>` (raw `/v1/spectroclusters/{uid}/events` 404s ~75% of the time) |
 | Cluster overview | `GET /v1/dashboard/spectroclusters/{uid}/overview` |
 | Download logs | `GET /v1/spectroclusters/{uid}/features/logFetcher/logs` |
 | Edge hosts | `GET /v1/edgehosts` |
