@@ -2,6 +2,8 @@
 
 Single source of truth for custom Claude Agent Skills with automated building and deployment via GitHub Actions.
 
+**Spectro SAs:** start with [TEAM-BOOTSTRAP.md](TEAM-BOOTSTRAP.md). It installs these skills and the SA CLIs from one prompt.
+
 ## Quick Start
 
 ```bash
