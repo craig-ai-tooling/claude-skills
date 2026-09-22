@@ -18,9 +18,11 @@ re-derive the palette by eye, and never introduce a second one in a project.
 <!-- or, for a self-contained page, inline the file's contents in a <style> -->
 ```
 
-Generators inline it. `ai-lawnmower/loop/status-page.py` is the reference
-implementation: it reads this file when present and falls back to an embedded
-copy, so the page still renders if the skill is not installed.
+Generators inline it. `stylesheet()` in `ai-lawnmower/console/console.py` is the
+reference implementation: it reads this file's `:root` token block when present and
+falls back to an embedded copy, so the page still renders if the skill is not
+installed. (The status page that used to be the reference, `loop/status-page.py`,
+was retired on 9/22/26 in favour of the console's work board.)
 
 ## What it looks like
 
@@ -50,8 +52,8 @@ nobody can read at 6am on a phone, so:
    able to read the page — and someone who reads it daily must not pay a
    paragraph for it every time. Craig, 9/15/26: *"No need for it to take up
    space always. I never read it."*
-   Reference implementation: `h2()` in `ai-lawnmower/loop/status-page.py`, with
-   the disclosure proven in a real browser by `loop/status_explain_check.mjs`.
+   Reference implementation: `explain_toggle()` in `ai-lawnmower/console/console.py`,
+   with the disclosure proven in a real browser by `loop/explain_toggle_check.mjs`.
    `craigcloud.css` deliberately does **not** ship the hide/reveal rules: other
    surfaces carry `.cc-explain` as a plain sibling paragraph with no toggle, and
    hiding it there would take their copy away with no way to get it back. Each
@@ -92,11 +94,12 @@ they carry no information.
 ## Sparklines
 
 Inline SVG, no library, no request. A single number is a point with no trend,
-and a point cannot say whether 90% is healthy or falling. See `sparkline()` in
-`ai-lawnmower/loop/status-page.py`.
+and a point cannot say whether 90% is healthy or falling. The one worked example was
+`sparkline()` in the retired status page:
+`git -C ~/code/ai-lawnmower show 5e5b26c:loop/status-page.py`.
 
 ## Where it is used
 
-`ai-lawnmower` status page and console · `upload-factory` ·
+`ai-lawnmower` console and its work board · `upload-factory` ·
 `mariners-lineup` (old-iPad browser baseline — verify there before shipping a
 new CSS feature) · any craigcloud.io surface.
