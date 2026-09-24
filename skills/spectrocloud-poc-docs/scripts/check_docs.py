@@ -11,6 +11,8 @@ Checks, in order:
        - credentials embedded in URLs (user:pass@host)
        - private key material, AWS access key IDs
        - literal API keys / bearer tokens (long literals where a $VAR belongs)
+       - Palette edge host registration tokens: an edgeHostToken / *TOKEN value,
+         or the bare 44-char base64 shape anywhere (prose, tables, inline code)
        - lab-range RFC-1918 IPs: 172.16.0.0/12 is an ERROR by default;
          10.0.0.0/8 and 192.168.0.0/16 are WARNs (ERRORs with --strict-ips)
        - extra regexes from --denylist FILE (one regex per line, # comments)
@@ -23,11 +25,13 @@ Exit status: 0 = clean (warnings allowed), 1 = errors found, 2 = usage/setup err
 
 Usage:
   check_docs.py <docs-site-dir> [--no-build] [--strict-ips] [--denylist FILE] [--json]
+  check_docs.py <docs-site-dir> --secrets-only   # the pre-publish gate the deploy scripts run
 """
 
 from __future__ import annotations
 
 import argparse
+import base64
 import html.parser
 import json
 import re
@@ -55,7 +59,16 @@ SECRET_PATTERNS = [
     ("literal-api-key", "error",
      re.compile(r"(?i)\b(?:apikey|api[-_]key|authorization:\s*bearer)\b['\"]?\s*[:=]?\s*['\"]?"
                 r"(?!\$|\{\{|<)[A-Za-z0-9+/=_-]{24,}")),
+    # A working user-data pasted into a guide carries the tenant's registration
+    # token. Placeholders (<token>, $TOKEN, {{ .token }}) do not match.
+    ("palette-edge-token", "error",
+     re.compile(r"(?i)edgeHostToken['\"]?\s*[:=]\s*['\"]?(?!\$|\{\{|<)[A-Za-z0-9+/=]{20,}")),
+    ("literal-token", "error",
+     re.compile(r"(?i)\b\w*token\w*['\"]?\s*[:=]\s*['\"]?(?!\$|\{\{|<)[A-Za-z0-9+/]{40,}={0,2}")),
 ]
+# Palette registration tokens are base64 of a 32-char, mostly-hex string: 44
+# chars ending in '='. Catches one quoted bare in prose, where no key names it.
+PALETTE_TOKEN_SHAPE = re.compile(r"(?<![A-Za-z0-9+/])[A-Za-z0-9+/]{43}=(?![A-Za-z0-9+/=])")
 IP_LAB_RANGE = re.compile(r"\b172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3}\b")
 IP_OTHER_PRIVATE = re.compile(r"\b(?:10\.\d{1,3}|192\.168)\.\d{1,3}\.\d{1,3}\b")
 
@@ -137,16 +150,36 @@ def check_fences_and_steps(path: Path, rel: str, text: str, findings: list[Findi
                                 "unclosed code fence at end of file"))
 
 
+def looks_like_palette_token(value: str) -> bool:
+    try:
+        raw = base64.b64decode(value, validate=True)
+    except ValueError:
+        return False
+    if len(raw) != 32:
+        return False
+    try:
+        text = raw.decode("ascii")
+    except UnicodeDecodeError:
+        return False
+    return sum(c in "0123456789abcdef" for c in text) >= 28
+
+
 def scan_secrets(rel: str, text: str, findings: list[Finding], strict_ips: bool,
                  extra_patterns: list[tuple[str, re.Pattern]]):
     lines = text.splitlines()
     for i, line in enumerate(lines):
         if line_allowed(lines, i):
             continue
+        named = False
         for name, severity, pattern in SECRET_PATTERNS:
             if pattern.search(line):
+                named = True
                 findings.append(Finding(severity, rel, i + 1, name,
                                         f"possible secret/internal reference: {line.strip()[:120]}"))
+        if not named and any(looks_like_palette_token(m.group(0))
+                             for m in PALETTE_TOKEN_SHAPE.finditer(line)):
+            findings.append(Finding("error", rel, i + 1, "palette-edge-token",
+                                    f"Palette registration token shape: {line.strip()[:120]}"))
         if IP_LAB_RANGE.search(line):
             findings.append(Finding("error", rel, i + 1, "lab-ip",
                                     f"172.16-31.x.x address (lab range) in customer docs: {line.strip()[:120]}"))
@@ -259,6 +292,8 @@ def main() -> int:
                     help="treat 10.x / 192.168.x addresses as errors too")
     ap.add_argument("--denylist", type=Path, action="append", default=[],
                     help="extra regex denylist file(s) — e.g. your lab's hostnames")
+    ap.add_argument("--secrets-only", action="store_true",
+                    help="secret scan only (implies --no-build); run before every publish")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     args = ap.parse_args()
 
@@ -276,11 +311,11 @@ def main() -> int:
     for path in iter_source_files(root):
         rel = str(path.relative_to(root))
         text = path.read_text(encoding="utf-8", errors="replace")
-        if path.suffix.lower() == ".md":
+        if path.suffix.lower() == ".md" and not args.secrets_only:
             check_fences_and_steps(path, rel, text, findings)
         scan_secrets(rel, text, findings, args.strict_ips, extra)
 
-    if not args.no_build:
+    if not (args.no_build or args.secrets_only):
         site_dir = run_mkdocs_build(root, findings)
         if site_dir is not None:
             check_built_html(site_dir, site_dir, findings)

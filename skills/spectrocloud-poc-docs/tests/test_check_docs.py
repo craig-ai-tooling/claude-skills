@@ -82,6 +82,23 @@ class DirtySiteTests(unittest.TestCase):
     def test_flags_literal_api_key(self):
         self.assertIn("literal-api-key", self.checks)
 
+    def test_flags_edge_host_token_in_user_data(self):
+        hits = [f for f in self.errors if f["check"] == "palette-edge-token"
+                and "edgeHostToken" in f["message"]]
+        self.assertTrue(hits, self.errors)
+
+    def test_flags_bare_registration_token_in_prose(self):
+        hits = [f for f in self.errors if f["check"] == "palette-edge-token"
+                and "Edge Host Token" in f["message"]]
+        self.assertTrue(hits, self.errors)
+
+    def test_secrets_only_still_refuses_a_token(self):
+        rc, data = run_check(str(FIXTURES / "dirty_site"), "--secrets-only")
+        self.assertEqual(rc, 1)
+        checks = {f["check"] for f in data["findings"]}
+        self.assertIn("palette-edge-token", checks)
+        self.assertNotIn("fence-language", checks)
+
     def test_denylist_pattern_fires(self):
         self.assertTrue(any(c.startswith("denylist:") for c in self.checks), self.checks)
 

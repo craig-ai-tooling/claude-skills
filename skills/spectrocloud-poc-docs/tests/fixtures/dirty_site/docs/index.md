@@ -28,3 +28,13 @@ A hostname the denylist file should catch: buildbox.lab.example
 
 <!-- check-docs:allow — placeholder example, intentionally suppressed -->
 This 192.168.1.50 mention is allowed by the marker above.
+
+A working user-data pasted in whole:
+
+```yaml
+stylus:
+  site:
+    edgeHostToken: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+```
+
+| Edge Host Token | `MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=` |

@@ -47,6 +47,9 @@ case "$CMD" in
   deploy)
     command -v mkdocs >/dev/null   || { echo "mkdocs not found (pipx install mkdocs-material)" >&2; exit 2; }
     command -v wrangler >/dev/null || { echo "wrangler not found (npm i -g wrangler)" >&2; exit 2; }
+    # Refuse before anything is built: a token in the source ships in site/.
+    python3 "$SCRIPT_DIR/../check_docs.py" "$SITE_DIR" --secrets-only \
+      || { echo "secret scan failed — refusing to publish (fix the findings above)" >&2; exit 1; }
     ( cd "$SITE_DIR" && mkdocs build --strict && wrangler pages deploy site --project-name "$PROJECT" )
     echo
     echo "Deployed: https://$APEX"
