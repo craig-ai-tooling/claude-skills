@@ -25,12 +25,10 @@ super-axi doctor                    # says exactly what is and is not configured
 
 One question takes ~15-20s. Ask several in one call rather than serially.
 
-Install:
-
-```bash
-curl -fsSL https://github.com/craig-ai-tooling/super-axi/releases/latest/download/super-axi.pyz \
-  -o ~/.local/bin/super-axi && chmod +x ~/.local/bin/super-axi
-```
+Install: already on `PATH` at `/usr/local/bin/super-axi` — just run it. If
+`command -v super-axi` comes back empty, the source is `~/forge-work/super-axi`; build and
+install it with `make install`. There is no `curl`-able release artifact yet: the GitHub App
+cannot create repositories, so `craig-ai-tooling/super-axi` does not exist.
 
 Exit codes are the AXI contract: `0` ok, `1` a required connector was unreachable, `4`
 the key was rejected, `5` finished but an optional source could not be consulted. Branch
