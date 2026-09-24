@@ -17,6 +17,9 @@ allowed_domains:              # who may read the site
 
 1. `check_docs.py <docs-site>` — clean (T0). The secret scan matters most here:
    the site is about to leave the building.
+   Both deploy providers re-run `check_docs.py --secrets-only` and refuse to
+   publish on any finding. A working `user-data` pasted into a guide carries the
+   tenant's edge host registration token: use `<registration-token>` instead.
 2. `extract_tests.py --suite ...` clean, and ideally a PASSED T2 report in
    `.poc-test-artifacts/` — otherwise the handoff note says **UNTESTED**.
 3. `deploy/<provider>.sh deploy --site-dir <docs-site>` — builds `--strict`, publishes.

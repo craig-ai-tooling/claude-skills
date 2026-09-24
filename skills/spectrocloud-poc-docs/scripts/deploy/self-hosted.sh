@@ -20,6 +20,8 @@
 # verify: probes the site URL and requires a non-2xx (auth challenge) response.
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 CMD="${1:-}"; shift || true
 SITE_DIR="" CONFIG=""
 while [ $# -gt 0 ]; do
@@ -46,6 +48,9 @@ case "$CMD" in
   deploy)
     : "${DOCS_HOST:?set DOCS_HOST to your docs server (this is a stub — see header)}"
     command -v mkdocs >/dev/null || { echo "mkdocs not found" >&2; exit 2; }
+    # Refuse before anything is built: a token in the source ships in site/.
+    python3 "$SCRIPT_DIR/../check_docs.py" "$SITE_DIR" --secrets-only \
+      || { echo "secret scan failed — refusing to publish (fix the findings above)" >&2; exit 1; }
     ( cd "$SITE_DIR" && mkdocs build --strict )
     if [ -n "${ADMIN_API_BASE:-}" ] && [ -n "${ADMIN_API_TOKEN:-}" ]; then
       DOMAINS_JSON=$(printf '%s\n' $DOMAINS | python3 -c 'import json,sys;print(json.dumps([d.strip() for d in sys.stdin if d.strip()]))')

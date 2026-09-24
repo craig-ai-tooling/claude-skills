@@ -15,3 +15,15 @@ echo done
 ```
 
 Back to [home](index.md).
+
+Registration token placeholders stay clean:
+
+```yaml
+stylus:
+  site:
+    edgeHostToken: <registration-token>
+```
+
+```bash
+export TOKEN="$REGISTRATION_TOKEN"
+```
