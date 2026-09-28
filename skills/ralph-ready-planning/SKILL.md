@@ -50,13 +50,15 @@ already exist — the https://axi.md catalog, `npm search`, PyPI, GitHub, and
 existing options lack; if nothing is lacking, adopt it instead of planning a build.
 
 **Phase 1 — PRD.** Fill in `references/prd-template.md`. Keep it tight: scope, the decisions
-you've *already made* (with the rejected alternative + why), non-goals, risks, and top-level
-acceptance criteria. The detail lives in the task list, not here.
+you've *already made* (with the rejected alternative + why), non-goals, risks, top-level
+acceptance criteria, and effort in AI-native units (template's "Effort & duration" note). The
+detail lives in the task list, not here.
 
 **Phase 2 — Decompose to Definition-of-Ready tasks.** Break the PRD into parent tasks → atomic
 sub-tasks, each meeting **every** item in `references/definition-of-ready.md`, each completable in
 one context window and self-contained for a cold instance. Write them into `prd.json`
-(status-tracked) and a human-readable `tasks.md`.
+(status-tracked) and a human-readable `tasks.md`, and produce the "Parallel lanes" grouping
+(`references/definition-of-ready.md`) alongside the task list.
 
 **Phase 3 — Self-gap-check.** For every task, ask the prime-directive question. Any "it depends",
 "choose the best", "handle errors appropriately", or missing file/signature ⇒ rewrite. This pass
