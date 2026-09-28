@@ -14,7 +14,8 @@ it with zero decisions. Every item below must be present in the task entry (in `
       structure to copy, so style isn't reinvented.
 - [ ] **Acceptance criteria** — the specific, checkable "done" condition.
 - [ ] **Test to write** — the test file + the exact cases to cover.
-- [ ] **Dependencies / order** — which task IDs must land first.
+- [ ] **Dependencies / order** — which task IDs must land first, checked against every task it
+      needs (in this plan or another), not only tasks already in progress.
 - [ ] **Guardrails** — what to NOT touch or change.
 - [ ] **One context window** — small enough to finish in a single fresh context. If not, split it.
 
@@ -23,6 +24,21 @@ it with zero decisions. Every item below must be present in the task entry (in `
 The whole plan is Ready only when, for **every** task, the answer to
 *"would a fresh Sonnet have to decide, guess, or ask?"* is **no**. If yes anywhere, the **plan**
 — not the task, and not the executor — is the bug.
+
+## Parallel lanes (plan-level)
+
+"Exact files" and "Dependencies / order" above are also the inputs for a lane grouping — do this
+whenever the plan has more than a few tasks. Two tasks are in different, independent lanes only
+if BOTH hold: no dependency edge between them, and their "Exact files" are disjoint. A shared
+file blocks concurrency exactly like a real dependency does, even with no logical dependency
+between the tasks.
+
+Write the lanes into the task list: within a lane, tasks run in dependency order; across lanes,
+no shared file and no dependency edge. This repo's Ralph loop runs one task notebook (or one
+`prd.json`) serially, so lanes don't parallelize by themselves — realizing them means giving each
+lane its own backlog item, its own notebook, and its own accurate allowlist, with later lanes
+`blocked-by` the earlier ones (`tasks-axi`). A `blocked-by` edge alone, without a separate
+notebook and allowlist per lane, does not unlock concurrent dispatch.
 
 ## Smells that mean "not ready"
 
