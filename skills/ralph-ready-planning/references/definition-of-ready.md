@@ -34,11 +34,12 @@ file blocks concurrency exactly like a real dependency does, even with no logica
 between the tasks.
 
 Write the lanes into the task list: within a lane, tasks run in dependency order; across lanes,
-no shared file and no dependency edge. This repo's Ralph loop runs one task notebook (or one
-`prd.json`) serially, so lanes don't parallelize by themselves — realizing them means giving each
-lane its own backlog item, its own notebook, and its own accurate allowlist, with later lanes
-`blocked-by` the earlier ones (`tasks-axi`). A `blocked-by` edge alone, without a separate
-notebook and allowlist per lane, does not unlock concurrent dispatch.
+no shared file and no dependency edge. Check how the TARGET repo's Ralph loop actually executes
+before assuming lanes parallelize by themselves — most run one task notebook (or one `prd.json`)
+serially, so realizing the lanes means giving each one its own backlog item, its own notebook,
+and its own accurate allowlist, with later lanes `blocked-by` the earlier ones (e.g. via
+`tasks-axi`, in a repo that has it). A `blocked-by` edge alone, without a separate notebook and
+allowlist per lane, does not unlock concurrent dispatch.
 
 ## Smells that mean "not ready"
 
