@@ -68,6 +68,22 @@ is what lets you drop the multi-round Codex-on-PRD critique.
 targeted Codex critic pass framed as *"where would a fresh Sonnet get stuck, guess, or make an
 undocumented decision?"* — not a broad review. Fold the gaps back in. Low blast radius → skip.
 
+**Writing the prompt a Ralph iteration reads (PROMPT.md).** A fresh reader skips a requirement
+that sits inside a bullet about something else. Measured 10/2/26 on `lm-state-journals`: both
+readers of the original missed two pre-commit commands buried in a "never open a journal
+directly" bullet; both readers of a rewrite with a numbered "Before you commit" list got them.
+Full Simplified Technical English cost +14% tokens, so adopt only these rules:
+
+1. One instruction per bullet.
+2. Any ordered procedure is a numbered list: finish a task, before you commit, prove a test
+   fails against the old code, NEEDS CLARIFICATION.
+3. A requirement never lives inside a bullet about something else.
+4. Include a numbered "Finish an iteration" list: verify exits 0, tick the task, append to
+   PROGRESS.md, each task-specific pre-commit command as its own step, safe-commit, stop.
+
+`loop/ralph-prepare.sh` asks the planner for this (requirement 9) and `loop/plan-gate.sh` warns
+(`prompt-dense-bullet`) on a bullet over 40 words or one holding two commands.
+
 **Phase 5 — Hand to Ralph.** Ensure the repo has `CLAUDE.md` (per-iteration rules: do one atomic
 task, run tests, commit, update `progress.txt`, and **append discovered patterns to AGENTS.md**)
 and the `prd.json`. Kick off `./scripts/ralph/ralph.sh --tool claude <max_iters>` with a sane
