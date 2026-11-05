@@ -323,15 +323,26 @@ def list_skills(api_key: str = None) -> list:
         api_key = get_api_key()
 
     headers = get_headers(api_key)
-    req = Request(API_BASE, headers=headers, method="GET")
-
-    try:
-        with urlopen(req) as response:
-            result = json.loads(response.read().decode())
-            return result.get("data", result)
-    except HTTPError as e:
-        error_body = e.read().decode()
-        raise ValueError(f"API error ({e.code}): {error_body}")
+    skills: list = []
+    page = None
+    # The list endpoint is paginated; without following next_page, skills past
+    # the first page are invisible and --force falls through to a 400.
+    for _ in range(50):
+        url = f"{API_BASE}?limit=100" + (f"&page={page}" if page else "")
+        req = Request(url, headers=headers, method="GET")
+        try:
+            with urlopen(req) as response:
+                result = json.loads(response.read().decode())
+        except HTTPError as e:
+            error_body = e.read().decode()
+            raise ValueError(f"API error ({e.code}): {error_body}")
+        if not isinstance(result, dict):
+            return result
+        skills.extend(result.get("data", []))
+        page = result.get("next_page")
+        if not result.get("has_more") or not page:
+            break
+    return skills
 
 
 def delete_skill(skill_id: str, api_key: str = None) -> bool:
