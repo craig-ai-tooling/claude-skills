@@ -435,6 +435,8 @@ crane ls ttl.sh/$IMAGE_REPO
 | VM boot order | Disk first, then CD-ROM |
 | SSH access | kairos / kairos |
 
+For PXE-deploying a Palette Edge image through MAAS instead of an ISO, see the `spectrocloud-maas-edge` skill.
+
 ## Additional Resources
 
 - `references/networking-examples.yaml` - Bridge and bond configurations
